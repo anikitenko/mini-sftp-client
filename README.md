@@ -10,8 +10,8 @@ This is a mini web based sFTP client written on Go using Revel Framework
 and pickup the latest version for your OS
 * Download and unzip archive locally
 * Run run.bat for Windows OR run.sh for Linux/OS X
-* When prompted enter port to listen on
-* Access http://127.0.0.1:[port you choose]
+* When prompted enter port to listen on (ex. 9000)
+* Access http://127.0.0.1:9000
 
 ### Run from sources
 
@@ -39,9 +39,9 @@ Run app:
     
 ## Usage
 
-Once you navigate to http://127.0.0.1:[port you choose] you should see the following screen:
+Once you navigate to http://127.0.0.1:9000 you should see the following screen:
 
-[[https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/first-screen.png|alt=first screen]]
+![first screen](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/first-screen.png)
 
 ##### Notes:
 * If you are able to authenticate without password on your server, you may ignore that field
@@ -53,7 +53,7 @@ you will be able to distinguish different connections
 
 ##### Establishing connection:
 
-[[https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/connecting.png|alt=connecting]]
+![connecting](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/connecting.png)
 
 ##### Notes:
 * After you successfully established connection, client will try to detect home directories no matter what is your local OS
@@ -62,15 +62,17 @@ you will be able to distinguish different connections
     for another, input data remains and button to ReConnect also remains,
      so silly click on it will cause all data to load from your another server
     
-[[https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab.gif|alt=like double tab]]
-[[https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab-local.gif|alt=like double tab local]]
+![like double tab](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab.gif|alt=like double tab)
+
+
+![like double tab local](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab-local.gif|alt=like double tab local)
 
 ##### Notes:
 * "Like double tab" works on Windows, OS X and Linux OS
 
 ##### Downloading files and using search:
 
-[[https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/download-search.gif|alt=download and search]]
+![download and search](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/download-search.gif|alt=download and search)
 
 ##### Notes:
 * Search works the same for remote files as for local
