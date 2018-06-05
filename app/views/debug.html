@@ -1,0 +1,63 @@
+<style type="text/css">
+    #sidebar {
+        position: absolute;
+        right: 0;
+        top: 69px;
+        max-width: 75%;
+        z-index: 1000;
+        background-color: #fee;
+        border: thin solid grey;
+        padding: 10px;
+    }
+
+    #toggleSidebar {
+        position: absolute;
+        right: 0;
+        top: 50px;
+        background-color: #fee;
+    }
+
+</style>
+<div id="sidebar" style="display:none;">
+    <h4>Available pipelines</h4>
+    <dl>
+    {{ range $index, $value := .}}
+        <dt>{{$index}}</dt>
+        <dd>{{$value}}</dd>
+    {{end}}
+    </dl>
+    <h4>Flash</h4>
+    <dl>
+    {{ range $index, $value := .flash}}
+        <dt>{{$index}}</dt>
+        <dd>{{$value}}</dd>
+    {{end}}
+    </dl>
+
+    <h4>Errors</h4>
+    <dl>
+    {{ range $index, $value := .errors}}
+        <dt>{{$index}}</dt>
+        <dd>{{$value}}</dd>
+    {{end}}
+    </dl>
+</div>
+<a id="toggleSidebar" href="#" class="toggles"><i class="glyphicon glyphicon-chevron-left"></i></a>
+
+<script>
+    let $sidebar = 0;
+    $('#toggleSidebar').on("click", function () {
+        const sidebarIElems = $('#toggleSidebar').find("i");
+        if ($sidebar === 1) {
+            $('#sidebar').hide();
+            sidebarIElems.addClass('glyphicon-chevron-left').removeClass('glyphicon-chevron-right');
+            $sidebar = 0;
+        } else {
+            $('#sidebar').show();
+            sidebarIElems.addClass('glyphicon-chevron-right').removeClass('glyphicon-chevron-left');
+            $sidebar = 1;
+        }
+
+        return false;
+    });
+</script>

@@ -1,0 +1,8 @@
+test-results/
+tmp/
+routes/
+vendor/*/
+.idea
+.DS_Store
+node_modules
+log/

@@ -1,0 +1,67 @@
+html * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+*, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #795d6b;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.grey {
+    background: #f1f1f1 url(../img/ticks.png);
+}
+
+div.ui-draggable, div.localFilesBlock div {
+    border: 1px solid #c1c1c1;
+    margin-bottom: 5px;
+}
+
+div.ui-draggable > span {
+    padding-left: 5px;
+    white-space: nowrap;
+    padding-right: 5px;
+    cursor: move;
+}
+
+div.ui-draggable > span[data-dir='true'] {
+    cursor: pointer;
+}
+
+div.localFilesBlock div > span {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+div > span[data-dir='true'] {
+    color: #0808dc;
+    font-weight: bold;
+}
+
+div.localFilesBlock div > span[data-dir='true'] {
+    cursor: pointer;
+}
+
+div > span[data-symlink='true'] {
+    color: #07d6dc;
+    font-weight: bold;
+}
+
+.fileIsMoving {
+    background-color: #e6e6e6;
+}
+
+.fileIsMoving > span {
+    font-weight: bold;
+}
+
+.quickNavButton {
+    cursor: pointer;
+}

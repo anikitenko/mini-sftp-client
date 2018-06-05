@@ -1,0 +1,111 @@
+{{template "header.html" .}}
+
+<div class="container">
+    <div class="row">
+        <div class="text-center" style="margin-top: 20px; margin-bottom: 20px">
+            <a href="#" id="connectionNameDisplay"
+               style="font-weight: bold;margin-bottom: 0;margin-top: 0;font-size: 18pt;">&nbsp;</a>
+        </div>
+        <form class="form-inline" style="margin-bottom: 50px">
+            <div class="form-group">
+                <label for="sshIp">IP</label>
+                <input type="text" class="form-control" id="sshIp" placeholder="ex. 127.0.0.1" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="sshUser">User</label>
+                <input type="text" class="form-control" id="sshUser" placeholder="root">
+            </div>
+            <div class="form-group">
+                <label for="sshPassword">Password</label>
+                <input type="password" class="form-control" id="sshPassword" placeholder="123"
+                       data-toggle="password">
+            </div>
+            <div class="form-group">
+                <label for="sshPort">Port</label>
+                <input type="text" class="form-control" id="sshPort" placeholder="22" value="22">
+            </div>
+            <div class="form-group">
+                <button type="button" role="button" id="testSSHConnection" class="btn btn-primary ladda-button"
+                        data-style="zoom-out">Test
+                </button>
+            </div>
+            <button id="sshConnect" type="submit" class="btn btn-success ladda-button" data-style="zoom-out">Connect!
+            </button>
+        </form>
+    </div>
+    <div class="col-md-6 remoteFilesNavigationBlock" style="padding-top: 10px;visibility: hidden;">
+        <div class="content row">
+            <div class="col-md-12" style="margin-bottom: 5px; padding-left: 0">
+                <div class="col-xs-4" style="padding-left: 0;">
+                <span id="remoteConnectionName" style="vertical-align: middle;line-height: 2;" data-toggle="tooltip"
+                      data-placement="top" data-container="body"></span>
+                </div>
+                <div class="col-xs-8" style="padding-left: 0; padding-right: 0">
+                    <select class="form-control input-sm" id="remotePath" title="Remote Path"></select>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 5px; padding-left: 0">
+                <span class="glyphicon glyphicon-arrow-left remoteGoBack quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Go Back" style="font-size: 15pt;"></span>
+                <span class="glyphicon glyphicon-home remoteGoHome quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Go Home"
+                      style="font-size: 15pt;margin-left: 10px;"></span>
+                <span class="glyphicon glyphicon-arrow-up remoteGoUp quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Go UP"
+                      style="font-size: 15pt;margin-left: 10px;"></span>
+                <span class="glyphicon glyphicon-refresh remoteRefresh quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Refresh"
+                      style="font-size: 15pt;margin-left: 10px;"></span>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 5px; padding: 0">
+                <div class="remoteFilesBlock pre-scrollable"
+                     style="padding: 10px 15px 0 15px; background-color: #ffffff; height: 600px;line-height: 20pt;">
+                </div>
+            </div>
+            <div class="col-md-12" style="padding: 0">
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" id="searchRemoteFiles" title="Search Remote Files"
+                           placeholder="Search for files: enter search term"
+                           onClick="this.setSelectionRange(0, this.value.length)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 localFilesNavigationBlock" style="padding-top: 10px;visibility: hidden;">
+        <div class="content row">
+            <div class="col-md-12" style="margin-bottom: 5px; padding-left: 0">
+                <select class="form-control input-sm" id="localPath" title="Remote Path"></select>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 5px; padding-left: 0">
+                <span class="glyphicon glyphicon-arrow-left localGoBack quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Go Back" style="font-size: 15pt;"></span>
+                <span class="glyphicon glyphicon-home localGoHome quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Go Home"
+                      style="font-size: 15pt;margin-left: 10px;"></span>
+                <span class="glyphicon glyphicon-arrow-up localGoUp quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Go UP"
+                      style="font-size: 15pt;margin-left: 10px;"></span>
+                <span class="glyphicon glyphicon-plus-sign localCreateNewDire quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Create New Directory"
+                      style="font-size: 15pt;margin-left: 10px;"></span>
+                <span class="glyphicon glyphicon-refresh localRefresh quickNavButton" data-toggle="tooltip"
+                      data-placement="top" data-container="body" title="Refresh"
+                      style="font-size: 15pt;margin-left: 10px;"></span>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 5px; padding: 0">
+                <div class="localFilesBlock pre-scrollable"
+                     style="padding: 10px 15px 0 15px; background-color: #ffffff; height: 600px;line-height: 20pt;">
+                </div>
+            </div>
+            <div class="col-md-12" style="padding: 0">
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" id="searchLocalFiles" title="Search Local Files"
+                           placeholder="Search for files: enter search term"
+                           onClick="this.setSelectionRange(0, this.value.length)">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "footer.html" .}}
