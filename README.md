@@ -18,6 +18,7 @@ and pickup the latest version for your OS
 Prerequisite:
 
 * Go 1.6+
+* govendor (https://github.com/kardianos/govendor)
 
 Install Revel:
 
@@ -26,6 +27,11 @@ Install Revel:
 Get mini sftp client:
 
     go get -u github.com/anikitenko/mini-sftp-client
+    
+Resolve dependencies:
+
+    cd $GOPATH/github.com/anikitenko/mini-sftp-client
+    govendor sync
     
 Run app:
 
