@@ -62,17 +62,17 @@ you will be able to distinguish different connections
     for another, input data remains and button to ReConnect also remains,
      so silly click on it will cause all data to load from your another server
     
-![like double tab](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab.gif|alt=like double tab)
+![like double tab](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab.gif)
 
 
-![like double tab local](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab-local.gif|alt=like double tab local)
+![like double tab local](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab-local.gif)
 
 ##### Notes:
 * "Like double tab" works on Windows, OS X and Linux OS
 
 ##### Downloading files and using search:
 
-![download and search](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/download-search.gif|alt=download and search)
+![download and search](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/download-search.gif)
 
 ##### Notes:
 * Search works the same for remote files as for local
