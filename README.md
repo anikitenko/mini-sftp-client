@@ -1,5 +1,7 @@
 # Mini sFTP client
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 This is a mini web based sFTP client written on Go using Revel Framework
 
 ## Quick Start
