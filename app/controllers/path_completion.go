@@ -10,6 +10,10 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// GetRemotePathCompletion acts like double tab for remote and returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// items: list of found files/folders
 func (c App) GetRemotePathCompletion() revel.Result {
 	var dataCompletion []map[string]interface{}
 
@@ -43,6 +47,10 @@ func (c App) GetRemotePathCompletion() revel.Result {
 	return c.RenderJSON(response)
 }
 
+// GetLocalPathCompletion acts like double tab for local and returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// items: list of found files/folders
 func (c App) GetLocalPathCompletion() revel.Result {
 	var (
 		dataCompletion []map[string]interface{}

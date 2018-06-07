@@ -9,6 +9,10 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// LocalPathGoTo returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// local_files: list of local files
 func (c App) LocalPathGoTo() revel.Result {
 	var localFilesList []FileStructureStruct
 

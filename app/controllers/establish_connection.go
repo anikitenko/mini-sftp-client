@@ -8,6 +8,8 @@ import (
 	"github.com/revel/revel"
 )
 
+// EstablishSSHConnection is a helper function which is used to connect via SSH
+// and accepts ssh_ip, ssh_user, ssh_password, ssh_port
 func (c App) EstablishSSHConnection() revel.Result {
 	sshIPHostname := strings.TrimSpace(c.Params.Get("ssh_ip"))
 	sshUser := strings.TrimSpace(c.Params.Get("ssh_user"))

@@ -10,6 +10,7 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+// createSSHSession returns pointers to ssh.Client and ssh.Session, and error if any
 func createSSHSession(ip, userName, password, port string) (*ssh.Client, *ssh.Session, error) {
 	username, _ := user.Current()
 	userIdRSAFile := username.HomeDir + string(filepath.Separator) + ".ssh" + string(filepath.Separator) + "id_rsa"

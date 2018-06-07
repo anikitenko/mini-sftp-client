@@ -9,6 +9,10 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// GetPath returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// path: formatted path from input
 func (c App) GetPath() revel.Result {
 	path := c.Params.Get("path")
 	remote := c.Params.Get("remote")

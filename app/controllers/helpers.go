@@ -9,6 +9,8 @@ import (
 	"strconv"
 )
 
+// CompileJSONResult returns map[string]interface{} from input.
+// Function helps to compile result for JSON output
 func CompileJSONResult(result bool, message string, otherData ...map[string]interface{}) map[string]interface{} {
 	data := make(map[string]interface{})
 	data["result"] = result
@@ -23,6 +25,8 @@ func CompileJSONResult(result bool, message string, otherData ...map[string]inte
 	return data
 }
 
+// PublicKeyFile returns ssh.AuthMethod which is needed to
+// create additional AuthMethod from privte key file
 func PublicKeyFile(file string) ssh.AuthMethod {
 	buffer, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -38,6 +42,7 @@ func PublicKeyFile(file string) ssh.AuthMethod {
 	return ssh.PublicKeys(key)
 }
 
+// Read implements PassThru struct. Used for displaying copying progress
 func (pt *PassThru) Read(p []byte) (int, error) {
 	n, err := pt.Reader.Read(p)
 	pt.total += int64(n)
@@ -49,6 +54,7 @@ func (pt *PassThru) Read(p []byte) (int, error) {
 	return n, err
 }
 
+// Round returns round of value.
 func Round(val float64, roundOn float64, places int) (newVal float64) {
 	var round float64
 	pow := math.Pow(10, float64(places))
@@ -63,6 +69,7 @@ func Round(val float64, roundOn float64, places int) (newVal float64) {
 	return
 }
 
+// FormatBytes returns formatted string of bytes (1024 bytes -> 1KB)
 func FormatBytes(size float64) string {
 	if size <= 0 {
 		return "Unknown"

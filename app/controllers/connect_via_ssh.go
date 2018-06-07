@@ -8,6 +8,13 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// ConnectViaSSH returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// remote_path: remote home directory
+// local_path: local home directory
+// local_path_separator: local separator which is needed for navigation compatible with Windows/*nix based systems
+// errors: array of messages received during the whole process of connecting via SSH
 func (c App) ConnectViaSSH() revel.Result {
 	var resultMessage []string
 	data := make(map[string]interface{})
