@@ -100,6 +100,7 @@ func (c App) Download() revel.Result {
 				header, err := tarReader.Next()
 
 				if err == io.EOF {
+					logger.Info("Archive was successfully extracted")
 					break
 				}
 				if err != nil {
@@ -115,6 +116,7 @@ func (c App) Download() revel.Result {
 						response := CompileJSONResult(false, "Cannot create a directory from archive")
 						return c.RenderJSON(response)
 					}
+					logger.Infof("Creating new directory at %s", localPath+string(filepath.Separator)+header.Name)
 				case tar.TypeReg:
 					outFile, err := os.Create(localPath + string(filepath.Separator) + header.Name)
 					if err != nil {
@@ -123,6 +125,7 @@ func (c App) Download() revel.Result {
 						return c.RenderJSON(response)
 					}
 
+					logger.Infof("Creating new file at %s", localPath + string(filepath.Separator) + header.Name)
 					if _, err := io.Copy(outFile, tarReader); err != nil {
 						logger.Warnf("Failed to write to a file from archive: %v", err)
 						response := CompileJSONResult(false, "Failed to write to a file from archive")
