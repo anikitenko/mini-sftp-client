@@ -60,7 +60,7 @@ func (c App) Download() revel.Result {
 				return c.RenderJSON(response)
 			}
 
-			logger.Infof("Transferred %d bytes", numberTransferred)
+			logger.Infof("Transferred %s", FormatBytes(float64(numberTransferred)))
 
 			//if err := SSHsession.Wait(); err != nil {
 			//	logger.Warnf("Something is wrong while waiting for command to complete: %v", err)
