@@ -5,7 +5,6 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -52,12 +51,15 @@ func (c App) Download() revel.Result {
 				response := CompileJSONResult(false, "Problem with running command via SSH")
 				return c.RenderJSON(response)
 			}
-			_, err = io.Copy(tempArchiveFile, stdoutNewPipe)
+			stdoutNewPipe = &PassThru{Reader: stdoutNewPipe}
+			numberTransferred, err := io.Copy(tempArchiveFile, stdoutNewPipe)
 			if err != nil {
 				logger.Warnf("Problem with copying archive via SSH: %v", err)
 				response := CompileJSONResult(false, "Problem with copying archive via SSH")
 				return c.RenderJSON(response)
 			}
+
+			logger.Infof("Transferred %s", FormatBytes(float64(numberTransferred)))
 
 			//if err := SSHsession.Wait(); err != nil {
 			//	logger.Warnf("Something is wrong while waiting for command to complete: %v", err)
@@ -97,6 +99,7 @@ func (c App) Download() revel.Result {
 				header, err := tarReader.Next()
 
 				if err == io.EOF {
+					logger.Info("Archive was successfully extracted")
 					break
 				}
 				if err != nil {
@@ -112,6 +115,7 @@ func (c App) Download() revel.Result {
 						response := CompileJSONResult(false, "Cannot create a directory from archive")
 						return c.RenderJSON(response)
 					}
+					logger.Infof("Creating new directory at %s", localPath+string(filepath.Separator)+header.Name)
 				case tar.TypeReg:
 					outFile, err := os.Create(localPath + string(filepath.Separator) + header.Name)
 					if err != nil {
@@ -120,6 +124,7 @@ func (c App) Download() revel.Result {
 						return c.RenderJSON(response)
 					}
 
+					logger.Infof("Creating new file at %s", localPath + string(filepath.Separator) + header.Name)
 					if _, err := io.Copy(outFile, tarReader); err != nil {
 						logger.Warnf("Failed to write to a file from archive: %v", err)
 						response := CompileJSONResult(false, "Failed to write to a file from archive")
@@ -133,17 +138,37 @@ func (c App) Download() revel.Result {
 				}
 			}
 		} else {
-			remoteFileContent, err := SSHsession.Output("cat '" + fileNamePost + "'")
+			stdoutNewPipe, err := SSHsession.StdoutPipe()
 			if err != nil {
-				logger.Warnf("Problem with getting file content: %v", err)
-				response := CompileJSONResult(false, "Problem with getting file content")
+				logger.Warnf("Cannot create a pipe to download file: %v", err)
+				response := CompileJSONResult(false, "Cannot create a pipe to download file")
 				return c.RenderJSON(response)
 			}
-			if err := ioutil.WriteFile(localPath+string(filepath.Separator)+fileName, remoteFileContent, 0644); err != nil {
-				logger.Warnf("Problem with writing file content: %v", err)
-				response := CompileJSONResult(false, "Problem with writing file content")
+
+			newLocalFile, err := os.OpenFile(localPath+string(filepath.Separator)+fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+			if err != nil {
+				logger.Warnf("Cannot open file to write to: %v", err)
+				response := CompileJSONResult(false, "Cannot open file to write to")
 				return c.RenderJSON(response)
 			}
+
+			if err := SSHsession.Start("cat '" + fileNamePost + "'"); err != nil {
+				logger.Warnf("Problem with running command via SSH: %v", err)
+				response := CompileJSONResult(false, "Problem with running command via SSH")
+				return c.RenderJSON(response)
+			}
+			stdoutNewPipe = &PassThru{Reader: stdoutNewPipe}
+			numberTransferred, err := io.Copy(newLocalFile, stdoutNewPipe)
+			if err != nil {
+				logger.Warnf("Problem with copying file via SSH: %v", err)
+				response := CompileJSONResult(false, "Problem with copying file via SSH")
+				return c.RenderJSON(response)
+			}
+
+			logger.Infof("Transferred %s", FormatBytes(float64(numberTransferred)))
+
+			SSHsession.Close()
+			newLocalFile.Close()
 		}
 	}
 	response := CompileJSONResult(true, "")
