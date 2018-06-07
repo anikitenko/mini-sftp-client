@@ -35,3 +35,14 @@ func PublicKeyFile(file string) ssh.AuthMethod {
 	}
 	return ssh.PublicKeys(key)
 }
+
+func (pt *PassThru) Read(p []byte) (int, error) {
+	n, err := pt.Reader.Read(p)
+	pt.total += int64(n)
+
+	if err == nil {
+		logger.Infof("Read %d bytes for a total of %d", n, pt.total)
+	}
+
+	return n, err
+}

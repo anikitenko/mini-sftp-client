@@ -52,12 +52,15 @@ func (c App) Download() revel.Result {
 				response := CompileJSONResult(false, "Problem with running command via SSH")
 				return c.RenderJSON(response)
 			}
-			_, err = io.Copy(tempArchiveFile, stdoutNewPipe)
+			stdoutNewPipe = &PassThru{Reader: stdoutNewPipe}
+			numberTransferred, err := io.Copy(tempArchiveFile, stdoutNewPipe)
 			if err != nil {
 				logger.Warnf("Problem with copying archive via SSH: %v", err)
 				response := CompileJSONResult(false, "Problem with copying archive via SSH")
 				return c.RenderJSON(response)
 			}
+
+			logger.Infof("Transferred %d bytes", numberTransferred)
 
 			//if err := SSHsession.Wait(); err != nil {
 			//	logger.Warnf("Something is wrong while waiting for command to complete: %v", err)
