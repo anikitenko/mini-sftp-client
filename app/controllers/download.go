@@ -127,7 +127,7 @@ func (c App) Download() revel.Result {
 					}
 					outFile.Close()
 				default:
-					logger.Warnf("General archive problem: uknown type: %s in %s", header.Typeflag, header.Name)
+					logger.Warnf("General archive problem: unknown type: %s in %s", header.Typeflag, header.Name)
 					response := CompileJSONResult(false, "General archive problem, Refer to logs :(")
 					return c.RenderJSON(response)
 				}
@@ -139,7 +139,7 @@ func (c App) Download() revel.Result {
 				response := CompileJSONResult(false, "Problem with getting file content")
 				return c.RenderJSON(response)
 			}
-			if err := ioutil.WriteFile(localPath+string(filepath.Separator)+fileName, remoteFileContent, 644); err != nil {
+			if err := ioutil.WriteFile(localPath+string(filepath.Separator)+fileName, remoteFileContent, 0644); err != nil {
 				logger.Warnf("Problem with writing file content: %v", err)
 				response := CompileJSONResult(false, "Problem with writing file content")
 				return c.RenderJSON(response)

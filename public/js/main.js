@@ -42,13 +42,16 @@ $(function () {
     $('#connectionNameDisplay').editable({
         type: 'text',
         mode: 'inline',
+        onblur: 'submit',
         display: function (value) {
             $(this).text(connectionName);
         },
         success: function (response, val) {
             connectionName = $.trim(val);
             document.title = connectionName;
-            $.notify("Connection name set to '" + connectionName + "'", {type: 'success', timer: 50});
+            if (connectionName !== "") {
+                $.notify("Connection name set to '" + connectionName + "'", {type: 'success', timer: 50});
+            }
         }
     });
 
