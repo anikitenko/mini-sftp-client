@@ -8,6 +8,10 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// RemotePathGoTo returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// remote_files: list of remote files
 func (c App) RemotePathGoTo() revel.Result {
 	var remoteFilesList []FileStructureStruct
 
@@ -80,7 +84,6 @@ func (c App) RemotePathGoTo() revel.Result {
 			}
 			remoteFilesList = append(remoteFilesList, file)
 		}
-		data["directory"] = true
 		data["remote_files"] = remoteFilesList
 	} else {
 		response := CompileJSONResult(false, "You specified wrong path OR you don't have permission to access it OR this is a file")

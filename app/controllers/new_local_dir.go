@@ -8,6 +8,10 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// CreateNewLocalDirectory creates new local directory and returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// new_path: path to newly created directory
 func (c App) CreateNewLocalDirectory() revel.Result {
 	name := c.Params.Get("name")
 	path := c.Params.Get("path")

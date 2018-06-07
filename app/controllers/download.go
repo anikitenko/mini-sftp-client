@@ -14,6 +14,10 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
+// Download returns JSON which contains:
+// result: true for success/false for any error
+// message: empty if success, message if error
+// If success function downloads file or directory locally
 func (c App) Download() revel.Result {
 	sourcePath := c.Params.Get("source_path")
 	localPath := c.Params.Get("local_path")
@@ -124,7 +128,7 @@ func (c App) Download() revel.Result {
 						return c.RenderJSON(response)
 					}
 
-					logger.Infof("Creating new file at %s", localPath + string(filepath.Separator) + header.Name)
+					logger.Infof("Creating new file at %s", localPath+string(filepath.Separator)+header.Name)
 					if _, err := io.Copy(outFile, tarReader); err != nil {
 						logger.Warnf("Failed to write to a file from archive: %v", err)
 						response := CompileJSONResult(false, "Failed to write to a file from archive")
