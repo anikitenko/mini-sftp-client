@@ -11,9 +11,10 @@ This is a mini web based sFTP client written on Go using Revel Framework
 * Access [releases page](https://github.com/anikitenko/mini-sftp-client/releases)
 and pickup the latest version for your OS
 * Download and unzip archive locally
-* Run run.bat for Windows OR run.sh for Linux/OS X
+* Run run.exe for Windows OR ./run for Linux/OS X
+* The run file will check for any updates
 * When prompted enter port to listen on (ex. 9000)
-* Access http://127.0.0.1:9000
+* Access http://127.0.0.1:9000 (if you choosed port 9000) for your browser
 
 ### Run from sources
 
