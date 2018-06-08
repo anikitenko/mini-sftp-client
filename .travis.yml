@@ -18,7 +18,9 @@ before_install: if [[ `npm -v` != 5.7* ]]; then npm i -g npm@5; fi
 
 install:
   - go get -v github.com/revel/cmd/revel
+  - go get -v github.com/kardianos/govendor
   - npm ci
 
 script:
+  - govendor sync
   - $(npm bin)/cypress run --record
