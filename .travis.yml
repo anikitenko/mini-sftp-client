@@ -20,10 +20,10 @@ install:
   - go get -v github.com/revel/cmd/revel
   - go get -v github.com/kardianos/govendor
   - npm ci
+  - govendor sync
 
 before_script:
   - revel run github.com/anikitenko/mini-sftp-client &
 
 script:
-  - govendor sync
   - $(npm bin)/cypress run --record
