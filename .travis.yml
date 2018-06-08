@@ -1,0 +1,22 @@
+language: node_js
+
+node_js:
+  - 8
+
+go:
+  - 1.9
+
+os:
+  - linux
+
+cache:
+  directories:
+    - ~/.npm
+    - ~/.cache
+
+install:
+  - go get -v github.com/revel/cmd/revel
+  - npm ci
+
+script:
+  - $(npm bin)/cypress run --record
