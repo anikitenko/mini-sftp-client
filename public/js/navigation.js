@@ -102,12 +102,14 @@ $(function () {
                     }
                 });
             } else {
-                $(_this).select2("trigger", "select", {
-                    data: {
-                        id: remotePathInputSearch,
-                        text: remotePathInputSearch
-                    }
-                });
+                if ($.trim(remotePathInputSearch) !== "") {
+                    $(_this).select2("trigger", "select", {
+                        data: {
+                            id: remotePathInputSearch,
+                            text: remotePathInputSearch
+                        }
+                    });
+                }
                 $.notify(
                     {
                         message: response["message"],
