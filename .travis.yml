@@ -8,6 +8,7 @@ go:
 
 os:
   - osx
+  - linux
 
 cache:
   directories:
