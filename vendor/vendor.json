@@ -3,6 +3,18 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "8Osdz/92WuVmvMuoPLjFTItiEk4=",
+			"path": "github.com/anmitsu/go-shlex",
+			"revision": "648efa622239a2f6ff949fed78ee37b48d499ba4",
+			"revisionTime": "2016-10-02T11:37:05Z"
+		},
+		{
+			"checksumSHA1": "oj/Bk225cZ4/YAb4CIWlu1tPS8E=",
+			"path": "github.com/gliderlabs/ssh",
+			"revision": "d3a6756290240931faaf90ec97ddd5d9290623d8",
+			"revisionTime": "2018-05-07T17:29:24Z"
+		},
+		{
 			"checksumSHA1": "6Ia3YgsRytBcSHe5HR/orFGBJfs=",
 			"path": "github.com/sirupsen/logrus",
 			"revision": "ea8897e79973357ba785ac2533559a6297e83c44",
