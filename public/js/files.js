@@ -50,7 +50,6 @@ $(function () {
                 if (response["result"]) {
                     if (!localFileExists) {
                         localFilesBlock.append($(ui.draggable).clone());
-                        $("#localPathGo").trigger("click");
                     }
                 } else {
                     sendNotify(response["message"], "danger");
