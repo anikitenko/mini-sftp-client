@@ -22,5 +22,5 @@ install:
 test_script:
   - .\node_modules\.bin\cypress version
   - .\node_modules\.bin\cypress verify
-  - ps: $ServerProcess = Start-Process c:\go\bin\revel run github.com/anikitenko/mini-sftp-client -PassThru
+  - ps: cd c:\gopath\src\github.com\anikitenko; $ServerProcess = Start-Process (c:\gopath\bin\revel run mini-sftp-client) -PassThru
   - .\node_modules\.bin\cypress run --record
