@@ -9,6 +9,7 @@ environment:
 stack: go 1.9
 
 install:
+  - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
   - ps: Install-Product node $env:nodejs_version
   - npm install -g npm@5
   - node --version
@@ -21,5 +22,5 @@ install:
 test_script:
   - .\node_modules\.bin\cypress version
   - .\node_modules\.bin\cypress verify
-  - ps: $ServerProcess = Start-Process revel run github.com/anikitenko/mini-sftp-client -PassThru
+  - ps: $ServerProcess = Start-Process c:\go\bin\revel run github.com/anikitenko/mini-sftp-client -PassThru
   - .\node_modules\.bin\cypress run --record
