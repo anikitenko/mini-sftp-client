@@ -26,7 +26,7 @@ func (c App) ConnectViaSSH() revel.Result {
 	defer SSHsession.Close()
 	defer SSHclient.Close()
 
-	if currentUserPathBytes, err := SSHsession.Output("echo -n $PWD"); err == nil {
+	if currentUserPathBytes, err := SSHsession.Output(`echo -n "$PWD"`); err == nil {
 		data["remote_path"] = string(currentUserPathBytes)
 	} else {
 		data["remote_path"] = ""

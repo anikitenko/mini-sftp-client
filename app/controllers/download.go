@@ -19,10 +19,8 @@ import (
 // message: empty if success, message if error
 // If success function downloads file or directory locally
 func (c App) Download() revel.Result {
-	sourcePath := c.Params.Get("source_path")
-	localPath := c.Params.Get("local_path")
-	isDir := c.Params.Get("is_dir")
-	fileNamePost := c.Params.Get("file_name")
+	sourcePath, localPath := c.Params.Get("source_path"), c.Params.Get("local_path")
+	isDir, fileNamePost := c.Params.Get("is_dir"), c.Params.Get("file_name")
 	fileName := filepath.Base(fileNamePost)
 
 	if connection := c.EstablishSSHConnection(); connection != nil {
