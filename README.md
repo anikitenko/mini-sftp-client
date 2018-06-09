@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Cypress.io tests](https://img.shields.io/badge/cypress.io-tests-green.svg?style=flat-square)](https://cypress.io)
+[![Build Status](https://travis-ci.org/anikitenko/mini-sftp-client.svg?branch=staging)](https://travis-ci.org/anikitenko/mini-sftp-client)
 
 This is a mini web based sFTP client written on Go using Revel Framework
 
