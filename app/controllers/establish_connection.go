@@ -21,6 +21,12 @@ func (c App) EstablishSSHConnection() revel.Result {
 	if sshIPHostname == "" {
 		response := CompileJSONResult(false, "SSH IP is empty")
 		return c.RenderJSON(response)
+	} else if sshIPHostname == MockSSHHostString {
+		if !MockSSHServer {
+			go createMockSSHServer()
+			MockSSHServer = true
+		}
+		sshIPHostname = "127.0.0.1"
 	}
 
 	if sshUser == "" {

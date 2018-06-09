@@ -1,0 +1,26 @@
+build: off
+
+clone_folder: c:\gopath\src\github.com\anikitenko\mini-sftp-client
+
+environment:
+  GOPATH: c:\gopath
+  nodejs_version: "6"
+
+stack: go 1.9
+
+install:
+  - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
+  - ps: Install-Product node $env:nodejs_version
+  - npm install -g npm@5
+  - node --version
+  - npm --version
+  - npm install
+  - go get -v github.com/revel/cmd/revel
+  - go get -v github.com/kardianos/govendor
+  - govendor sync
+
+test_script:
+  - .\node_modules\.bin\cypress version
+  - .\node_modules\.bin\cypress verify
+  - ps: cd c:\gopath\src\github.com\anikitenko; $ServerProcess = Start-Process (c:\gopath\bin\revel run mini-sftp-client) -PassThru
+  - .\node_modules\.bin\cypress run --record
