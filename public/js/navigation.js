@@ -30,16 +30,7 @@ $(function () {
                         results: data.items
                     }
                 } else {
-                    $.notify(
-                        {
-                            message: data["message"],
-                            icon: 'glyphicon glyphicon-warning-sign'
-                        },
-                        {
-                            type: 'danger',
-                            timer: 50
-                        }
-                    );
+                    sendNotify(data["message"], "danger");
                     return {
                         results: ""
                     }
@@ -108,16 +99,7 @@ $(function () {
                         text: remotePathInputSearch
                     }
                 });
-                $.notify(
-                    {
-                        message: response["message"],
-                        icon: 'glyphicon glyphicon-warning-sign'
-                    },
-                    {
-                        type: 'danger',
-                        timer: 50
-                    }
-                );
+                sendNotify(response["message"], "danger");
             }
         }, 'json').always(function () {
             notify.update('progress', '100');
@@ -144,16 +126,7 @@ $(function () {
                         results: data.items
                     }
                 } else {
-                    $.notify(
-                        {
-                            message: data["message"],
-                            icon: 'glyphicon glyphicon-warning-sign'
-                        },
-                        {
-                            type: 'danger',
-                            timer: 50
-                        }
-                    );
+                    sendNotify(data["message"], "danger");
                     return {
                         results: ""
                     }
@@ -204,16 +177,7 @@ $(function () {
                         text: localPathInputSearch
                     }
                 });
-                $.notify(
-                    {
-                        message: response["message"],
-                        icon: 'glyphicon glyphicon-warning-sign'
-                    },
-                    {
-                        type: 'danger',
-                        timer: 50
-                    }
-                );
+                sendNotify(response["message"], "danger");
             }
         }, 'json').always(function () {
             notify.update('progress', '100');

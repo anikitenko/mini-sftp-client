@@ -25,16 +25,7 @@ $(function () {
                 if (localRemoteFile.attr("data-dir") === "true") {
                     notify.update('progress', '100');
                     notify.close();
-                    $.notify(
-                        {
-                            message: "Since directory already exists we won't download it",
-                            icon: 'glyphicon glyphicon-warning-sign'
-                        },
-                        {
-                            type: 'warning',
-                            timer: 50
-                        }
-                    );
+                    sendNotify("Since directory already exists we won't download it", "warning");
                     return;
                 }
                 localFileExists = true;
@@ -43,15 +34,7 @@ $(function () {
             if (!confirmOverwrite) {
                 notify.update('progress', '100');
                 notify.close();
-                $.notify(
-                    {
-                        message: "Download was canceled"
-                    },
-                    {
-                        type: 'success',
-                        timer: 50
-                    }
-                );
+                sendNotify("Download was canceled", "success");
                 return;
             }
             $.post("/download", {
@@ -70,16 +53,7 @@ $(function () {
                         $("#localPathGo").trigger("click");
                     }
                 } else {
-                    $.notify(
-                        {
-                            message: response["message"],
-                            icon: 'glyphicon glyphicon-warning-sign'
-                        },
-                        {
-                            type: 'danger',
-                            timer: 50
-                        }
-                    );
+                    sendNotify(response["message"], "danger");
                 }
             }, 'json').always(function () {
                 notify.update('progress', '100');
