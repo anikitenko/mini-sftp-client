@@ -36,7 +36,7 @@ func getReleaseInfo() (*releaseInfo, error) {
 	for _, v := range assets {
 		m, ok := v.(map[string]interface{})
 		if !ok {
-			errors.New("invalid data")
+			_ = errors.New("invalid data")
 		}
 		assetName := m["name"].(string)
 		browserDownload := m["browser_download_url"].(string)

@@ -9,6 +9,12 @@
 			"revisionTime": "2016-10-02T11:37:05Z"
 		},
 		{
+			"checksumSHA1": "HH2/aYk2z7YEcNSZBwYTaQEPPq8=",
+			"path": "github.com/bitly/go-simplejson",
+			"revision": "0c965951289cce37dec52ad1f34200fefc816777",
+			"revisionTime": "2017-10-23T17:51:54Z"
+		},
+		{
 			"checksumSHA1": "oj/Bk225cZ4/YAb4CIWlu1tPS8E=",
 			"path": "github.com/gliderlabs/ssh",
 			"revision": "d3a6756290240931faaf90ec97ddd5d9290623d8",
