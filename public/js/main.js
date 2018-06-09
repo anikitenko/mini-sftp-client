@@ -4,7 +4,9 @@ let localPathSeparator = "/",
     connectionName = "New Connection";
 
 window.onbeforeunload = function () {
-    return "Are you sure you wish to leave the page?";
+    if ($("#sshIp").val() !== "sftp-mock-test") {
+        return "Are you sure you wish to leave the page?";
+    }
 };
 
 $.notifyDefaults({
