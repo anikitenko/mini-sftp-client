@@ -5,6 +5,7 @@
 
 
 GET     /                                       App.Index
+PUT     /setPinCode                             App.SetPinCode
 POST    /:action                                App.:action
 
 # Map static resources from the /app/public folder to the /public path
