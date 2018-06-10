@@ -2,19 +2,20 @@ describe('MainForm Requests Test', function () {
     const sshUser = Cypress.env("mock_user"),
         sshPassword = Cypress.env("mock_pass"),
         sshPort = Cypress.env("mock_port"),
-        sshHost = Cypress.env("mock_host");
+        sshHost = Cypress.env("mock_host"),
+        postBodySSH = {
+            ssh_ip: sshHost,
+            ssh_user: sshUser,
+            ssh_password: sshPassword,
+            ssh_port: sshPort
+        };
 
     it('Check test connection request', function () {
         cy.request({
             method: "POST",
             url: "/testSSHConnection",
             form: true,
-            body: {
-                ssh_ip: sshHost,
-                ssh_user: sshUser,
-                ssh_password: sshPassword,
-                ssh_port: sshPort
-            }
+            body: postBodySSH
         })
             .then((response) => {
                 expect(response.status).to.eq(200)
@@ -28,12 +29,7 @@ describe('MainForm Requests Test', function () {
             method: "POST",
             url: "/connectViaSSH",
             form: true,
-            body: {
-                ssh_ip: sshHost,
-                ssh_user: sshUser,
-                ssh_password: sshPassword,
-                ssh_port: sshPort
-            }
+            body: postBodySSH
         })
             .then((response) => {
                 expect(response.status).to.eq(200)
