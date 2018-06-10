@@ -10,7 +10,7 @@ describe('MainForm Requests Test', function () {
             ssh_port: sshPort
         };
 
-    it('Check test connection request', function () {
+    function testConnection(skip) {
         cy.request({
             method: "POST",
             url: "/testSSHConnection",
@@ -18,10 +18,21 @@ describe('MainForm Requests Test', function () {
             body: postBodySSH
         })
             .then((response) => {
-                expect(response.status).to.eq(200)
-                expect(response.body.result).to.be.true
-                expect(response.body.message).to.be.empty
+                if (response.body.result && !skip) {
+                    expect(response.body.message).to.be.empty
+                } else if (skip) {
+                    expect(response.status).to.eq(200)
+                    expect(response.body.result).to.be.true
+                    expect(response.body.message).to.be.empty
+                } else {
+                    cy.wait(1000)
+                    testConnection(true)
+                }
             })
+    }
+
+    it('Check test connection request', function () {
+        testConnection(false)
     })
 
     it('Check connect request', function () {
