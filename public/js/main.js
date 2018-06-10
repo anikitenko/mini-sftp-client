@@ -60,6 +60,11 @@ $(function () {
         }
     });
 
+    $(".mainForm").on("submit", function (e) {
+        e.preventDefault();
+        $("#sshConnect").trigger("click");
+    });
+
     $("#sshConnect").on("click", function (e) {
         e.preventDefault();
         let sshIP = $("#sshIp").val(),
