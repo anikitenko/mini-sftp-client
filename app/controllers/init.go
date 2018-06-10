@@ -40,7 +40,13 @@ func checkPinCode(c *revel.Controller) revel.Result {
 	testParam := c.Params.Get("for_testing")
 	r := c.Request
 
-	if (r.Method != "POST" || c.ClientIP == "127.0.0.1") || testParam != "true" {
+	if c.ClientIP == "127.0.0.1" && testParam != "true" {
+		if r.Method != "POST" {
+			return nil
+		}
+	}
+
+	if r.Method != "POST" || (c.ClientIP == "127.0.0.1" && testParam != "true") {
 		return nil
 	}
 
