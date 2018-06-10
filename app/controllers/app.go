@@ -11,10 +11,11 @@ type App struct {
 
 // Index returns just index page
 func (c App) Index() revel.Result {
+	testParam := c.Params.Get("for_testing")
 	userPinCode := c.Session["pin_code"]
 	c.ViewArgs["noPinCode"] = false
 
-	if PinCode != userPinCode && c.ClientIP != "127.0.0.1" {
+	if (PinCode != userPinCode && c.ClientIP != "127.0.0.1") || testParam == "true" {
 		c.ViewArgs["noPinCode"] = true
 	}
 
