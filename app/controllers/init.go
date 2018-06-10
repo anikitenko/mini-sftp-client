@@ -4,9 +4,9 @@ import (
 	"github.com/revel/revel"
 	logger "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
-	"math/rand"
-	"strconv"
 	"time"
+	"io"
+	"crypto/rand"
 )
 
 // Defines global variables
@@ -22,7 +22,17 @@ var (
 )
 
 func GeneratePinCode() {
-	PinCode = strconv.Itoa(rand.Intn(9999))
+	table := []byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+
+	b := make([]byte, 4)
+	_, err := io.ReadAtLeast(rand.Reader, b, 4)
+	if err != nil {
+		logger.Fatalf("Problem with generating pin code: %v", err)
+	}
+	for i := 0; i < len(b); i++ {
+		b[i] = table[int(b[i])%len(table)]
+	}
+	PinCode = string(b)
 	logger.Warnf("Your pin code: %s. You will need this in order to access client not from your local machine!", PinCode)
 }
 
