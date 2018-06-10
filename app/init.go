@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/revel/revel"
-	"mini-sftp-client/app/controllers"
+	"github.com/anikitenko/mini-sftp-client/app/controllers"
 )
 
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
