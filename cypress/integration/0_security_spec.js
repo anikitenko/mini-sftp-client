@@ -11,7 +11,7 @@ describe('Security Test', function () {
         };
 
     it('Access main page', function () {
-        cy.visit("http://127.0.0.1:9000/?for_testing=true", {
+        cy.visit("/?for_testing=true", {
             onBeforeLoad(win) {
                 cy.stub(win, 'prompt')
             },

@@ -5,7 +5,7 @@ describe('MainForm Test', function () {
         sshHost = Cypress.env("mock_host");
 
     it('Visit main page', function () {
-        cy.visit("http://127.0.0.1:9000");
+        cy.visit("/");
 
         cy.title()
             .should('include', 'New Connection');
