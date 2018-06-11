@@ -24,9 +24,8 @@ func (c App) Index() revel.Result {
 
 func (c App) SetPinCode() revel.Result {
 	userPinCode := c.Params.Get("pin_code")
-	realPinCode := c.Session["real_pin_code"]
 
-	if realPinCode != userPinCode {
+	if PinCode != userPinCode {
 		TimeToWaitInvalidPin = TimeToWaitInvalidPin + time.Second
 
 		time.Sleep(TimeToWaitInvalidPin)

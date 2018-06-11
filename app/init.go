@@ -2,7 +2,6 @@ package app
 
 import (
 	"github.com/revel/revel"
-	"github.com/anikitenko/mini-sftp-client/app/controllers"
 )
 
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
@@ -29,6 +28,4 @@ func init() {
 		revel.CompressFilter,          // Compress the result.
 		revel.ActionInvoker,           // Invoke the action.
 	}
-
-	revel.OnAppStart(controllers.GeneratePinCode)
 }

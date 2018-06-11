@@ -59,5 +59,6 @@ func checkPinCode(c *revel.Controller) revel.Result {
 }
 
 func init() {
+	revel.OnAppStart(GeneratePinCode)
 	revel.InterceptFunc(checkPinCode, revel.BEFORE, &App{})
 }
