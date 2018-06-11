@@ -11,14 +11,9 @@ describe('Security Test', function () {
         };
 
     it('Access main page', function () {
-        cy.visit("/?for_testing=true", {
-            onBeforeLoad(win) {
-                cy.stub(win, 'prompt')
-            },
-            failOnStatusCode: false
-        });
+        cy.visit("/?for_testing=true");
 
-        cy.window().its('prompt').should('be.called')
+        cy.focused().should('have.class', 'bootbox-input-number')
     })
 
     it('Try to test connection', function () {

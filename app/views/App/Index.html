@@ -3,24 +3,29 @@
 {{if .noPinCode}}
 <script>
     $(function () {
-        let pinCode = prompt("Since you are accessing sFTP client not from localhost you should enter pin code");
-        if ($.trim(pinCode) === "") {
-            return
-        }
-        $.ajax({
-            method: "PUT",
-            url: "/setPinCode",
-            data: {
-                pin_code: pinCode
-            },
-            success: function (response) {
-                if (response["result"]) {
-                    window.location.reload()
-                } else {
-                    alert(response["message"]);
+        bootbox.prompt({
+            title: "Since you are accessing sFTP client not from localhost you should enter pin code",
+            inputType: 'number',
+            callback: function (pinCode) {
+                if ($.trim(pinCode) === "") {
+                    return
                 }
+                $.ajax({
+                    method: "PUT",
+                    url: "/setPinCode",
+                    data: {
+                        pin_code: pinCode
+                    },
+                    success: function (response) {
+                        if (response["result"]) {
+                            window.location.reload()
+                        } else {
+                            bootbox.alert(response["message"]);
+                        }
+                    }
+                })
             }
-        })
+        });
     })
 </script>
 {{else}}
