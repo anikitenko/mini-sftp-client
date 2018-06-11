@@ -31,21 +31,17 @@ Install Revel:
 
 Get mini sftp client:
 
-    go get -u github.com/anikitenko/mini-sftp-client
+    git clone git@github.com:anikitenko/mini-sftp-client.git
     
 Resolve dependencies:
 
-    cd $GOPATH/src/github.com/anikitenko/mini-sftp-client
-    govendor sync
-
-OR (if your $GOPATH containes multiple paths (check this by entering echo $GOPATH) use the first one)
-
-    cd <your first path of $GOPATH>/src/github.com/anikitenko/mini-sftp-client
+    cd mini-sftp-client
     govendor sync
     
 Run app:
 
-    revel run github.com/anikitenko/mini-sftp-client
+    cd ..
+    revel run mini-sftp-client
     
 ### Benefits and Key features
 - [x] Nothing to install: unzip and run. Use different tabs for different connections
