@@ -28,11 +28,17 @@
         });
     })
 </script>
+
 {{else}}
 
 <div class="container">
     <div class="row">
-        <div class="text-center" style="margin-top: 20px; margin-bottom: 20px">
+        <div class="text-right">
+            <span data-toggle="tooltip" data-placement="bottom" data-container="body"
+                  title="You will need this PIN code to access client not from localhost"
+                  style="border-bottom: 1px dotted #000;">PIN code: <span id="pinCode">{{.pinCode}}</span></span>
+        </div>
+        <div class="text-center" style="margin-bottom: 20px">
             <a href="#" id="connectionNameDisplay"
                style="font-weight: bold;margin-bottom: 0;margin-top: 0;font-size: 18pt;">&nbsp;</a>
         </div>
