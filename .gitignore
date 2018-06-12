@@ -2,7 +2,10 @@ test-results/
 tmp/
 routes/
 vendor/*/
+run/vendor/*/
 .idea
 .DS_Store
 node_modules/
 log/
+cypress/videos/
+cypress/screenshots/
