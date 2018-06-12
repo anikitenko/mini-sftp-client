@@ -1,8 +1,44 @@
 {{template "header.html" .}}
 
+{{if .noPinCode}}
+<script>
+    $(function () {
+        bootbox.prompt({
+            title: "Since you are accessing sFTP client not from localhost you should enter pin code",
+            inputType: 'number',
+            callback: function (pinCode) {
+                if ($.trim(pinCode) === "") {
+                    return
+                }
+                $.ajax({
+                    method: "PUT",
+                    url: "/setPinCode",
+                    data: {
+                        pin_code: pinCode
+                    },
+                    success: function (response) {
+                        if (response["result"]) {
+                            window.location.reload()
+                        } else {
+                            bootbox.alert(response["message"]);
+                        }
+                    }
+                })
+            }
+        });
+    })
+</script>
+
+{{else}}
+
 <div class="container">
     <div class="row">
-        <div class="text-center" style="margin-top: 20px; margin-bottom: 20px">
+        <div class="text-right">
+            <span data-toggle="tooltip" data-placement="bottom" data-container="body"
+                  title="You will need this PIN code to access client not from localhost"
+                  style="border-bottom: 1px dotted #000;">PIN code: <span id="pinCode">{{.pinCode}}</span></span>
+        </div>
+        <div class="text-center" style="margin-bottom: 20px">
             <a href="#" id="connectionNameDisplay"
                style="font-weight: bold;margin-bottom: 0;margin-top: 0;font-size: 18pt;">&nbsp;</a>
         </div>
@@ -85,7 +121,7 @@
                 <span class="glyphicon glyphicon-arrow-up localGoUp quickNavButton" data-toggle="tooltip"
                       data-placement="top" data-container="body" title="Go UP"
                       style="font-size: 15pt;margin-left: 10px;"></span>
-                <span class="glyphicon glyphicon-plus-sign localCreateNewDire quickNavButton" data-toggle="tooltip"
+                <span class="glyphicon glyphicon-plus-sign localCreateNewDir quickNavButton" data-toggle="tooltip"
                       data-placement="top" data-container="body" title="Create New Directory"
                       style="font-size: 15pt;margin-left: 10px;"></span>
                 <span class="glyphicon glyphicon-refresh localRefresh quickNavButton" data-toggle="tooltip"
@@ -108,4 +144,5 @@
     </div>
 </div>
 
+{{end}}
 {{template "footer.html" .}}

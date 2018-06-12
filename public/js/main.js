@@ -4,8 +4,11 @@ let localPathSeparator = "/",
     connectionName = "New Connection";
 
 window.onbeforeunload = function () {
-    if ($("#sshIp").val() !== "sftp-mock-test") {
-        return "Are you sure you wish to leave the page?";
+    const sshIPValue = $.trim($("#sshIp").val());
+    if (sshIPValue !== "" && sshIPValue !== undefined) {
+        if (sshIPValue !== "sftp-mock-test") {
+            return "Are you sure you wish to leave the page?";
+        }
     }
 };
 
@@ -227,26 +230,28 @@ $(function () {
         }, 'json');
     });
 
-    $(".localCreateNewDire").on("click", function () {
-        let newDirName = prompt("Please enter new directory name");
-        newDirName = $.trim(newDirName);
-        if (newDirName === "") {
-            return
-        }
-
-        $.post("/createNewLocalDirectory", {path: $('#localPath').val(), name: newDirName}, function (response) {
-            if (response["result"]) {
-                let newPath = response["new_path"];
-                $('#localPath').select2("trigger", "select", {
-                    data: {
-                        id: newPath,
-                        text: newPath
+    $(".localCreateNewDir").on("click", function () {
+        bootbox.prompt({
+            title: "Please enter new directory name",
+            callback: function (newDirName) {
+                if ($.trim(newDirName) === "") {
+                    return
+                }
+                $.post("/createNewLocalDirectory", {path: $('#localPath').val(), name: newDirName}, function (response) {
+                    if (response["result"]) {
+                        let newPath = response["new_path"];
+                        $('#localPath').select2("trigger", "select", {
+                            data: {
+                                id: newPath,
+                                text: newPath
+                            }
+                        });
+                    } else {
+                        sendNotify(response["message"], "danger");
                     }
-                });
-            } else {
-                sendNotify(response["message"], "danger");
+                }, 'json')
             }
-        }, 'json');
+        });
     });
 
     $("#searchRemoteFiles").on("keyup", function () {

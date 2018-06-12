@@ -6,3 +6,5 @@ vendor/*/
 .DS_Store
 node_modules/
 log/
+cypress/videos/
+cypress/screenshots/
