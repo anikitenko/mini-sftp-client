@@ -86,5 +86,8 @@ describe('MainForm Test', function () {
 
         cy.contains("Loading remote files...")
         cy.contains("Loading local files...")
+
+        cy.get("#remoteConnectionName").trigger("mouseover")
+        cy.get('.tooltip').should('be.visible')
     })
 });
