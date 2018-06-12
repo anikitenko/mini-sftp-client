@@ -1,3 +1,10 @@
 {
-  "projectId": "g371yj"
+  "projectId": "g371yj",
+  "baseUrl": "http://127.0.0.1:9000",
+  "env": {
+    "mock_host": "sftp-mock-test",
+    "mock_user": "test",
+    "mock_pass": "test",
+    "mock_port": "2222"
+  }
 }
