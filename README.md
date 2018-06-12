@@ -43,11 +43,14 @@ Run app:
     cd ..
     revel run mini-sftp-client
     
-### Benefits and Key features
+## Benefits and Key features
 - [x] Nothing to install: unzip and run. Use different tabs for different connections
 - [x] Runs on Linux, OS X, Windows
 - [x] Run client for all interfaces and access client from mobile device and manage files
-- [x] Run client on your file server (possible Linux based, Windows, OS X) and access from your desktop or mobile 
+- [x] Run client on your file server (possible Linux based, Windows, OS X) and access from your desktop or mobile
+
+## Security
+Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
     
 ## Usage
 
