@@ -53,5 +53,5 @@ func getReleaseInfo() (*releaseInfo, error) {
 		}
 	}
 
-	return nil, errors.New("url not found for os")
+	return nil, errors.New("url not found")
 }

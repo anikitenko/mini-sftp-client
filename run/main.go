@@ -34,7 +34,9 @@ func main() {
 
 	releaseFound, err := getReleaseInfo()
 	if err != nil {
-		logger.Warnf("Problem with checking for updates: %v", err)
+		if err.Error() != "url not found" {
+			logger.Warnf("Problem with checking for updates: %v", err)
+		}
 		StartClient()
 		return
 	}
