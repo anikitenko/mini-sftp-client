@@ -40,7 +40,9 @@ func (c App) ConnectViaSSH() revel.Result {
 			homeDirectory = currentAbsPath
 		} else {
 			homeDirectory = ""
+			logger.Warnf("Problem with getting absolute path: %v", err)
 		}
+		logger.Warnf("Problem with getting current user: %v", err)
 	} else {
 		homeDirectory = username.HomeDir
 	}

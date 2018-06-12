@@ -33,9 +33,9 @@ describe('Remote and local navigation', function () {
     it('Check remote path', function() {
         cy.get("#select2-remotePath-container").then(($remotePath) => {
             cy.get(".remoteFilesNavigationBlock").find(".select2").click()
-            cy.focused().should("have.value", $remotePath.attr("title"))
+            cy.focused().should("have.value", $remotePath.text())
             cy.focused().type("{backspace}")
-            cy.wait(100)
+            cy.wait(200)
             cy.focused().parent().parent().get(".select2-results > ul")
                 .find("li").not(":contains('No results found')").should("not.be.empty")
 
@@ -48,9 +48,9 @@ describe('Remote and local navigation', function () {
     it('Check local path', function() {
         cy.get("#select2-localPath-container").then(($localPath) => {
             cy.get(".localFilesNavigationBlock").find(".select2").click()
-            cy.focused().should("have.value", $localPath.attr("title"))
+            cy.focused().should("have.value", $localPath.text())
             cy.focused().type("{backspace}")
-            cy.wait(100)
+            cy.wait(200)
             cy.focused().parent().parent().get(".select2-results > ul")
                 .find("li").not(":contains('No results found')").should("not.be.empty")
 
