@@ -48,7 +48,6 @@ describe('MainForm Requests Test', function () {
                 expect(response.body.message).to.be.empty
                 expect(response.body.errors).to.be.null
                 expect(response.body.local_path).not.to.be.empty
-                expect(response.body.local_path_separator).not.to.be.empty
                 expect(response.body.remote_path).not.to.be.empty
             })
     })
