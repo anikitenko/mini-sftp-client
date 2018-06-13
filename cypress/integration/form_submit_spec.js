@@ -42,7 +42,7 @@ describe('MainForm Test', function () {
 
     it('Check main buttons', function () {
         cy.get("#testSSHConnection")
-            .click()
+            .click({force: true})
 
         cy.contains("SSH connection was established successfully to '" + sshHost + ":" + sshPort + "'")
 
@@ -51,7 +51,7 @@ describe('MainForm Test', function () {
             .should("have.value", sshUser+"123")
 
         cy.get("#testSSHConnection")
-            .click()
+            .click({force: true})
 
         cy.contains("We could not reach '127.0.0.1:2222' OR login/password is incorrect")
 
