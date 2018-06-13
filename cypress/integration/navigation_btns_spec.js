@@ -38,6 +38,7 @@ describe('Remote and local navigation buttons', function () {
     it("Check remote up button", function() {
         cy.get(".remoteGoUp").trigger("click")
         cy.contains("Loading remote files...")
+        cy.wait(100)
         cy.get(".remoteGoBack").trigger("click")
         cy.contains("Loading remote files...")
     })
@@ -45,6 +46,7 @@ describe('Remote and local navigation buttons', function () {
     it("Check local up button", function() {
         cy.get(".localGoUp").trigger("click")
         cy.contains("Loading local files...")
+        cy.wait(100)
         cy.get(".localGoBack").trigger("click")
         cy.contains("Loading local files...")
     })
