@@ -36,6 +36,9 @@ func (c App) GetRemotePathCompletion() revel.Result {
 
 	listOfCompletionFound := strings.Split(string(dataResult), "\n")
 	for _, data := range listOfCompletionFound {
+		if strings.TrimSpace(data) == "" {
+			continue
+		}
 		dirFilePath := map[string]interface{}{}
 		dirFilePath["id"] = data
 		dirFilePath["text"] = data

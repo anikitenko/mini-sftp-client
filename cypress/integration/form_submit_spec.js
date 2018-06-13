@@ -1,6 +1,5 @@
 describe('MainForm Test', function () {
     const sshUser = Cypress.env("mock_user"),
-        sshPassword = Cypress.env("mock_pass"),
         sshPort = Cypress.env("mock_port"),
         sshHost = Cypress.env("mock_host");
 
@@ -38,27 +37,12 @@ describe('MainForm Test', function () {
     });
 
     it('Fill in main form', function () {
-        cy.get('#sshIp')
-            .type(sshHost)
-            .should('have.value', sshHost);
-
-        cy.get("#sshUser")
-            .type(sshUser)
-            .should('have.value', sshUser);
-
-        cy.get("#sshPassword")
-            .type(sshPassword)
-            .should('have.value', sshPassword);
-
-        cy.get("#sshPort")
-            .clear()
-            .type(sshPort)
-            .should('have.value', sshPort)
+        cy.fillMainForm()
     });
 
     it('Check main buttons', function () {
         cy.get("#testSSHConnection")
-            .click()
+            .click({force: true})
 
         cy.contains("SSH connection was established successfully to '" + sshHost + ":" + sshPort + "'")
 
@@ -67,7 +51,7 @@ describe('MainForm Test', function () {
             .should("have.value", sshUser+"123")
 
         cy.get("#testSSHConnection")
-            .click()
+            .click({force: true})
 
         cy.contains("We could not reach '127.0.0.1:2222' OR login/password is incorrect")
 
@@ -86,5 +70,8 @@ describe('MainForm Test', function () {
 
         cy.contains("Loading remote files...")
         cy.contains("Loading local files...")
+
+        cy.get("#remoteConnectionName").trigger("mouseover")
+        cy.get('.tooltip').should('be.visible')
     })
 });

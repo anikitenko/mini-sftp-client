@@ -41,7 +41,7 @@ $(function () {
         },
         minimumInputLength: 1
     }).on('select2:open', function () {
-        $('.select2-search input').val($(this).val()).trigger('input');
+        $('.select2-search > input').val($(this).val()).trigger('input');
     }).on('select2:select', function () {
         let sshIP = $("#sshIp").val(),
             sshUser = $("#sshUser").val(),
