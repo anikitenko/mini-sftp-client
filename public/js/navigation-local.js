@@ -7,7 +7,7 @@ $(function () {
             type: 'POST',
             url: '/getLocalPathCompletion',
             dataType: 'json',
-            delay: 500,
+            delay: 200,
             data: function (params) {
                 return {
                     path: params.term
