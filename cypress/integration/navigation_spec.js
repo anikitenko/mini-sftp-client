@@ -13,6 +13,7 @@ describe('Remote and local navigation', function () {
 
     it('Check remote path', function() {
         cy.get("#select2-remotePath-container").then(($remotePath) => {
+            expect($remotePath.text()).not.be.empty
             cy.get(".remoteFilesNavigationBlock").find(".select2-selection").click()
             cy.get(".select2-search__field").should("have.value", $remotePath.text())
             cy.get(".select2-search__field").type("{backspace}")
@@ -32,6 +33,7 @@ describe('Remote and local navigation', function () {
 
     it('Check local path', function() {
         cy.get("#select2-localPath-container").then(($localPath) => {
+            expect($localPath.text()).not.be.empty
             cy.get(".localFilesNavigationBlock").find(".select2-selection").click()
             cy.get(".select2-search__field").should("have.value", $localPath.text())
             cy.get(".select2-search__field").type("{backspace}")
