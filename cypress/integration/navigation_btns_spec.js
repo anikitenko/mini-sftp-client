@@ -1,27 +1,8 @@
 describe('Remote and local navigation buttons', function () {
-    const sshUser = Cypress.env("mock_user"),
-        sshPassword = Cypress.env("mock_pass"),
-        sshPort = Cypress.env("mock_port"),
-        sshHost = Cypress.env("mock_host");
 
     before(function() {
         cy.visit("/")
-        cy.get('#sshIp')
-            .type(sshHost)
-            .should('have.value', sshHost);
-
-        cy.get("#sshUser")
-            .type(sshUser)
-            .should('have.value', sshUser);
-
-        cy.get("#sshPassword")
-            .type(sshPassword)
-            .should('have.value', sshPassword);
-
-        cy.get("#sshPort")
-            .clear()
-            .type(sshPort)
-            .should('have.value', sshPort)
+        cy.fillMainForm()
 
         cy.get(".mainForm")
             .submit()
