@@ -24,9 +24,6 @@
     display: inline-block; /* should be inline to take effect of parent's white-space: nowrap */
     vertical-align: top;
     margin-left: 7px;
-    /* inline-block emulation for IE7*/
-    zoom: 1;
-    *display: inline;
 }
 
 .editable-buttons.editable-buttons-bottom {
@@ -37,12 +34,9 @@
 
 .editable-input {
     vertical-align: top;
-    display: inline-block; /* should be inline to take effect of parent's white-space: nowrap */
+    display: inline; /* should be inline to take effect of parent's white-space: nowrap */
     width: auto; /* bootstrap-responsive has width: 100% that breakes layout */
     white-space: normal; /* reset white-space decalred in parent*/
-    /* display-inline emulation for IE7*/
-    zoom: 1;
-    *display: inline;
 }
 
 .editable-buttons .editable-cancel {
@@ -50,7 +44,7 @@
 }
 
 /*for jquery-ui buttons need set height to look more pretty*/
-.editable-buttons button.ui-button-icon-only {
+.ui-button-icon-only {
     height: 24px;
     width: 30px;
 }
@@ -146,7 +140,7 @@
 }
 
 .editable-container.editable-popup {
-    max-width: none !important; /* without this rule poshytip/tooltip does not stretch */
+    max-width: none; /* without this rule poshytip/tooltip does not stretch */
 }
 
 .editable-container.popover {
@@ -154,12 +148,9 @@
 }
 
 .editable-container.editable-inline {
-    display: inline-block;
+    display: inline;
     vertical-align: middle;
     width: auto;
-    /* inline-block emulation for IE7*/
-    zoom: 1;
-    *display: inline;
 }
 
 .editable-container.ui-widget {
@@ -193,15 +184,10 @@ a.editable-click.editable-disabled:hover {
     font-weight: bold;
 }
 
-.editable-unsaved:after {
-    /*    content: '*'*/
-}
-
 .editable-bg-transition {
     -webkit-transition: background-color 1400ms ease-out;
     -moz-transition: background-color 1400ms ease-out;
     -o-transition: background-color 1400ms ease-out;
-    -ms-transition: background-color 1400ms ease-out;
     transition: background-color 1400ms ease-out;
 }
 
@@ -276,15 +262,15 @@ a.editable-click.editable-disabled:hover {
     display: none;
 }
 
-.datepicker.days div.datepicker-days {
+.datepicker-days {
     display: block;
 }
 
-.datepicker.months div.datepicker-months {
+.datepicker-months {
     display: block;
 }
 
-.datepicker.years div.datepicker-years {
+.datepicker-years {
     display: block;
 }
 
@@ -308,7 +294,7 @@ a.editable-click.editable-disabled:hover {
     background-color: transparent;
 }
 
-.datepicker table tr td.day:hover {
+.day:hover {
     background: #eeeeee;
     cursor: pointer;
 }
@@ -329,18 +315,9 @@ a.editable-click.editable-disabled:hover {
 .datepicker table tr td.today:hover,
 .datepicker table tr td.today.disabled,
 .datepicker table tr td.today.disabled:hover {
-    background-color: #fde19a;
-    background-image: -moz-linear-gradient(top, #fdd49a, #fdf59a);
-    background-image: -ms-linear-gradient(top, #fdd49a, #fdf59a);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
-    background-image: -webkit-linear-gradient(top, #fdd49a, #fdf59a);
-    background-image: -o-linear-gradient(top, #fdd49a, #fdf59a);
-    background-image: linear-gradient(top, #fdd49a, #fdf59a);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+    background: #fde19a linear-gradient(top, #fdd49a, #fdf59a) repeat-x;
     border-color: #fdf59a #fdf59a #fbed50;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     color: #000;
 }
 
@@ -408,10 +385,8 @@ a.editable-click.editable-disabled:hover {
     background-image: -o-linear-gradient(top, #f3c17a, #f3e97a);
     background-image: linear-gradient(top, #f3c17a, #f3e97a);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
     border-color: #f3e97a #f3e97a #edde34;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -463,10 +438,8 @@ a.editable-click.editable-disabled:hover {
     background-image: -o-linear-gradient(top, #b3b3b3, #808080);
     background-image: linear-gradient(top, #b3b3b3, #808080);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
     border-color: #808080 #808080 #595959;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     color: #fff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
@@ -517,10 +490,8 @@ a.editable-click.editable-disabled:hover {
     background-image: -o-linear-gradient(top, #0088cc, #0044cc);
     background-image: linear-gradient(top, #0088cc, #0044cc);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
     border-color: #0044cc #0044cc #002a80;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     color: #fff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
@@ -595,10 +566,8 @@ a.editable-click.editable-disabled:hover {
     background-image: -o-linear-gradient(top, #0088cc, #0044cc);
     background-image: linear-gradient(top, #0088cc, #0044cc);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
     border-color: #0044cc #0044cc #002a80;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     color: #fff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
@@ -642,7 +611,7 @@ a.editable-click.editable-disabled:hover {
     color: #999999;
 }
 
-.datepicker th.datepicker-switch {
+.datepicker-switch {
     width: 145px;
 }
 
