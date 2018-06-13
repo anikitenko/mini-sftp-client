@@ -7,7 +7,7 @@ $(function () {
             type: 'POST',
             url: '/getLocalPathCompletion',
             dataType: 'json',
-            delay: 500,
+            delay: 200,
             data: function (params) {
                 return {
                     path: params.term
@@ -33,7 +33,7 @@ $(function () {
         },
         minimumInputLength: 1
     }).on('select2:open', function () {
-        $('.select2-search input').val($(this).val()).trigger('input');
+        $('.select2-search > input').val($(this).val()).trigger('input');
     }).on('select2:select', function () {
         let _this = this,
             postPath = $(_this).val(),
