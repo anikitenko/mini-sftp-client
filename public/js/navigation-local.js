@@ -1,5 +1,6 @@
 let localPathInputSearch = "",
-    localPathHistoryBack = [];
+    localPathHistoryBack = [],
+    localPathSeparator = "/";
 
 $(function () {
     $("#localPath").select2({
@@ -51,6 +52,7 @@ $(function () {
                 let htmlBlockLocal = "",
                     localFiles = response["local_files"];
                 localPathInputSearch = postPath;
+                localPathSeparator = response["local_path_separator"];
                 if (localPathHistoryBack[0] !== postPath) {
                     localPathHistoryBack.unshift(postPath);
                 }

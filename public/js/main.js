@@ -1,5 +1,4 @@
-let localPathSeparator = "/",
-    remoteHome = "",
+let remoteHome = "",
     localHome = "",
     connectionName = "New Connection";
 
@@ -90,7 +89,6 @@ $(function () {
             if (response["result"]) {
                 let localPath = response["local_path"],
                     remotePath = response["remote_path"];
-                localPathSeparator = response["local_path_separator"];
                 remoteHome = response["remote_path"];
                 localHome = response["local_path"];
                 if (response["errors"] !== null) {

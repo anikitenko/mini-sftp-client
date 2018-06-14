@@ -7,6 +7,11 @@ import (
 	"golang.org/x/crypto/ssh"
 	"math"
 	"strconv"
+	"io"
+	"archive/tar"
+	"os"
+	"path/filepath"
+	"compress/gzip"
 )
 
 // CompileJSONResult returns map[string]interface{} from input.
@@ -88,4 +93,66 @@ func FormatBytes(size float64) string {
 	}
 	getSuffix := suffixes[int(math.Floor(base))]
 	return strconv.FormatFloat(getSize, 'f', -1, 64) + " " + string(getSuffix)
+}
+
+func UnTarArchive(name, path string) (string, error) {
+	var errorMessage string
+	archiveOpen, err := os.Open(name)
+	if err != nil {
+		errorMessage = "Problem with opening temp archive"
+		return errorMessage, err
+	}
+	defer func() {
+		archiveOpen.Close()
+		if err := os.Remove(name); err != nil {
+			logger.Warnf("Unable to remove temp archive: %v", err)
+		}
+	}()
+
+	gzipOpen, err := gzip.NewReader(archiveOpen)
+	if err != nil {
+		errorMessage = "Problem with creating stream from temp archive"
+		return errorMessage, err
+	}
+
+	tarReader := tar.NewReader(gzipOpen)
+
+	for {
+		header, err := tarReader.Next()
+
+		if err == io.EOF {
+			logger.Info("Archive was successfully extracted")
+			break
+		}
+		if err != nil {
+			errorMessage = "Problem with reading temp archive"
+			return errorMessage, err
+		}
+
+		switch header.Typeflag {
+		case tar.TypeDir:
+			if err := os.Mkdir(path+string(filepath.Separator)+header.Name, 0755); err != nil {
+				errorMessage = "Cannot create a directory from archive"
+				return errorMessage, err
+			}
+			logger.Infof("Creating new directory at %s", path+string(filepath.Separator)+header.Name)
+		case tar.TypeReg:
+			outFile, err := os.Create(path + string(filepath.Separator) + header.Name)
+			if err != nil {
+				errorMessage = "Cannot create a file from archive"
+				return errorMessage, err
+			}
+
+			logger.Infof("Creating new file at %s", path+string(filepath.Separator)+header.Name)
+			if _, err := io.Copy(outFile, tarReader); err != nil {
+				errorMessage = "Failed to write to a file from archive"
+				return errorMessage, err
+			}
+			outFile.Close()
+		default:
+			errorMessage = "General archive problem, refer to logs"
+			return errorMessage, err
+		}
+	}
+	return "", nil
 }
