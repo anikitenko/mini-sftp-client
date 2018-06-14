@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd $TRAVIS_BUILD_DIR
+
 rm -rf node_modules
 revel build github.com/anikitenko/mini-sftp-client mini-sftp-osx
 GOOS=linux revel build github.com/anikitenko/mini-sftp-client mini-sftp-linux

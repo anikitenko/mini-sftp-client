@@ -39,7 +39,7 @@ script:
 before_deploy:
   - |
       brew install jshon
-      export BODY=$(jshon -s "$(cat CHANGELOG.md)")
+      export BODY=Detailed release information can be found at [CHANGELOG.md $TRAVIS_TAG](https://github.com/anikitenko/mini-sftp-client/blob/master/CHANGELOG.md#$(echo $TRAVIS_TAG | sed -e 's/\.//g'))
       mkdir artifacts
       export PRE_RELEASE=false
       bash deploy.sh
