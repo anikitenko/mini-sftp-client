@@ -12,8 +12,8 @@ os:
 
 cache:
   directories:
-    - ~/.npm
-    - ~/.cache
+    - "~/.npm"
+    - "~/.cache"
 
 before_install: if [[ `npm -v` != 5.7* ]]; then npm i -g npm@5; fi
 
@@ -27,6 +27,38 @@ before_script:
   - revel run github.com/anikitenko/mini-sftp-client &
 
 script:
-  - $(npm bin)/cypress run --record
+  - "$(npm bin)/cypress run --record"
   - kill $(jobs -p) || true
-  - go build -o ./run/run ./run
+  - go build -o ./run/run.tmp ./run
+
+before_deploy:
+  - |
+     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        brew install jshon
+        export BODY=$(jshon -s "$(cat CHANGELOG.md)"))
+
+        mkdir artifacts
+
+        if [[ "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
+          export TO_DEPLOY="yes"
+          export PRE_RELEASE=false
+          bash deploy.sh
+          if [[ "$TRAVIS_TAG" =~ -.+ ]]; then
+            export PRE_RELEASE=true
+          fi
+        fi
+     fi
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: es9Y5dmO4kbLNIyPdjJm8dYa03LG9CiCdhjIBtvrRdWX1uPULh8+yFERdEANDzeE1AFkcfNU0vnLIIFVj5VyXfRyfvaNyLrDWkFSwF9q3rKvkcD6PNDZkong8zgAWNGDF6GRRErXTMXQzitNW2NHhhli/C6ai8Q0Ee+krnBeKavJCAylMrAsBXJd6JZmzk/ZVyni3Sg6zgnu/vruBpc3puXlonJsxlVkpHsdGOF7FC5WL2aIr50Mw8tdBlhXHhA3izFipblQCd2lHbrUpWOayB9zNBVvdJyxFMyoYK3Mn1WWNJ5UHC4HcvDMv3AMg7fanoEB8R5MMWrMeWWAYtfD8y7xNVtPUpquxyOgGTBCQdmL8EmcqUWalot4SkfxOdZIOeSsVQMOokORXM6iCHC5+cv2XUyRdSPKMok5sTXzfI3/9gOKU/I6k/v+V3TNUq/OTTOqnMJb8fHTjyK44ON9nbekckrC5yUq3n2GtHu5gUJfszkZVimRkjgUSDlRXUuNxrHd0m8O4mByHkwGj0ajDeeb+FYQCo9YJ1lPpiC9V7HeqfMF/+OEV5xModBElLQU/bEjipqN37N1shFifyIDJLBpVyodO1OpT705aRRl3EOUvt9LIiJXUUx+JTY6sOC2gg1mIZbo2hsLpaud6rUgdPC67ljy2gBmMC30UtpM+E8=
+  body: ${BODY}
+  prerelease: $PRE_RELEASE
+  name: $TRAVIS_TAG
+  file: artifacts/*
+  on:
+    tags: true
+    condition: $TO_DEPLOY = yes
+    branch: master
