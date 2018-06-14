@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd $TRAVIS_BUILD_DIR
+cd "$TRAVIS_BUILD_DIR"
 
 rm -rf node_modules
 revel build github.com/anikitenko/mini-sftp-client mini-sftp-osx
@@ -23,9 +23,14 @@ cp mini-sftp-osx/mini-sftp-client-darwin artifacts/
 cp mini-sftp-linux/mini-sftp-client-linux artifacts/
 cp mini-sftp-windows/mini-sftp-client-windows.exe artifacts/
 
-zip mini-sftp-osx.zip mini-sftp-osx
-zip mini-sftp-linux.zip mini-sftp-linux
-zip mini-sftp-windows.zip mini-sftp-windows
+version="$(echo $TRAVIS_TAG | sed -e 's/^v//g')"
+echo $version > mini-sftp-osx/.version
+echo $version > mini-sftp-linux/.version
+echo $version > mini-sftp-windows/.version
+
+zip -r mini-sftp-osx.zip mini-sftp-osx
+zip -r mini-sftp-linux.zip mini-sftp-linux
+zip -r mini-sftp-windows.zip mini-sftp-windows
 
 mv mini-sftp-osx.zip artifacts/
 mv mini-sftp-linux.zip artifacts/
