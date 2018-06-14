@@ -32,20 +32,19 @@ script:
   - go build -o ./run/run.tmp ./run
   - |
       if [[ "$TRAVIS_OS_NAME" == "osx" && "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
-        export TO_DEPLOY="yes"
+        echo "Will be releasing!"
+        export TO_DEPLOY=yes
       fi
 
 before_deploy:
   - |
-      if [[ "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
-        brew install jshon
-        export BODY=$(jshon -s "$(cat CHANGELOG.md)"))
-        mkdir artifacts
-        export PRE_RELEASE=false
-        bash deploy.sh
-        if [[ "$TRAVIS_TAG" =~ -.+ ]]; then
-          export PRE_RELEASE=true
-        fi
+      brew install jshon
+      export BODY=$(jshon -s "$(cat CHANGELOG.md)"))
+      mkdir artifacts
+      export PRE_RELEASE=false
+      bash deploy.sh
+      if [[ "$TRAVIS_TAG" =~ -.+ ]]; then
+        export PRE_RELEASE=true
       fi
 
 deploy:
@@ -59,5 +58,5 @@ deploy:
   file: artifacts/*
   on:
     tags: true
-    condition: $TO_DEPLOY = yes
+    condition: "$TO_DEPLOY = yes"
     branch: master
