@@ -11,7 +11,7 @@ rm -rf mini-sftp-windows/src mini-sftp-windows/run.sh mini-sftp-windows/run.bat
 
 go build -o ./mini-sftp-osx/run ./run && chmod +x ./mini-sftp-osx/run
 GOOS=linux go build -o ./mini-sftp-linux/run ./run && chmod +x ./mini-sftp-linux/run
-GOOS-windows go build -o ./mini-sftp-windows/run.exe ./run
+GOOS=windows go build -o ./mini-sftp-windows/run.exe ./run
 
 mv mini-sftp-osx/mini-sftp-client mini-sftp-osx/mini-sftp-client-darwin
 mv mini-sftp-linux/mini-sftp-client mini-sftp-linux/mini-sftp-client-linux
