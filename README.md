@@ -1,6 +1,9 @@
 # Mini sFTP client
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Cypress.io tests](https://img.shields.io/badge/cypress.io-tests-green.svg?style=flat-square)](https://cypress.io)
+[![Build Status](https://travis-ci.org/anikitenko/mini-sftp-client.svg?branch=staging)](https://travis-ci.org/anikitenko/mini-sftp-client)
+[![CodeFactor](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client/badge)](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client)
 
 This is a mini web based sFTP client written on Go using Revel Framework
 
@@ -11,9 +14,10 @@ This is a mini web based sFTP client written on Go using Revel Framework
 * Access [releases page](https://github.com/anikitenko/mini-sftp-client/releases)
 and pickup the latest version for your OS
 * Download and unzip archive locally
-* Run run.bat for Windows OR run.sh for Linux/OS X
+* Run run.exe for Windows OR ./run for Linux/OS X
+* The run file will check for any updates
 * When prompted enter port to listen on (ex. 9000)
-* Access http://127.0.0.1:9000
+* Access http://127.0.0.1:9000 (if you choosed port 9000) for your browser
 
 ### Run from sources
 
@@ -28,27 +32,26 @@ Install Revel:
 
 Get mini sftp client:
 
-    go get -u github.com/anikitenko/mini-sftp-client
+    git clone git@github.com:anikitenko/mini-sftp-client.git
     
 Resolve dependencies:
 
-    cd $GOPATH/src/github.com/anikitenko/mini-sftp-client
-    govendor sync
-
-OR (if your $GOPATH containes multiple paths (check this by entering echo $GOPATH) use the first one)
-
-    cd <your first path of $GOPATH>/src/github.com/anikitenko/mini-sftp-client
+    cd mini-sftp-client
     govendor sync
     
 Run app:
 
-    revel run github.com/anikitenko/mini-sftp-client
+    cd ..
+    revel run mini-sftp-client
     
-### Benefits and Key features
+## Benefits and Key features
 - [x] Nothing to install: unzip and run. Use different tabs for different connections
 - [x] Runs on Linux, OS X, Windows
 - [x] Run client for all interfaces and access client from mobile device and manage files
-- [x] Run client on your file server (possible Linux based, Windows, OS X) and access from your desktop or mobile 
+- [x] Run client on your file server (possible Linux based, Windows, OS X) and access from your desktop or mobile
+
+## Security
+Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
     
 ## Usage
 
