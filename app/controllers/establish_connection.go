@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/revel/revel"
+	"time"
 )
 
 // EstablishSSHConnection is a helper function which is used to connect via SSH
@@ -21,6 +22,13 @@ func (c App) EstablishSSHConnection() revel.Result {
 	if sshIPHostname == "" {
 		response := CompileJSONResult(false, "SSH IP is empty")
 		return c.RenderJSON(response)
+	} else if sshIPHostname == MockSSHHostString {
+		if !MockSSHServer {
+			go createMockSSHServer()
+			time.Sleep(time.Second)
+			MockSSHServer = true
+		}
+		sshIPHostname = "127.0.0.1"
 	}
 
 	if sshUser == "" {

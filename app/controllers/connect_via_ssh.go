@@ -13,7 +13,6 @@ import (
 // message: empty if success, message if error
 // remote_path: remote home directory
 // local_path: local home directory
-// local_path_separator: local separator which is needed for navigation compatible with Windows/*nix based systems
 // errors: array of messages received during the whole process of connecting via SSH
 func (c App) ConnectViaSSH() revel.Result {
 	var resultMessage []string
@@ -26,7 +25,7 @@ func (c App) ConnectViaSSH() revel.Result {
 	defer SSHsession.Close()
 	defer SSHclient.Close()
 
-	if currentUserPathBytes, err := SSHsession.Output("echo -n $PWD"); err == nil {
+	if currentUserPathBytes, err := SSHsession.Output(`echo -n "$HOME"`); err == nil {
 		data["remote_path"] = string(currentUserPathBytes)
 	} else {
 		data["remote_path"] = ""
@@ -40,7 +39,9 @@ func (c App) ConnectViaSSH() revel.Result {
 			homeDirectory = currentAbsPath
 		} else {
 			homeDirectory = ""
+			logger.Warnf("Problem with getting absolute path: %v", err)
 		}
+		logger.Warnf("Problem with getting current user: %v", err)
 	} else {
 		homeDirectory = username.HomeDir
 	}
@@ -48,8 +49,6 @@ func (c App) ConnectViaSSH() revel.Result {
 	data["local_path"] = homeDirectory
 
 	data["errors"] = resultMessage
-
-	data["local_path_separator"] = string(filepath.Separator)
 
 	response := CompileJSONResult(true, "", data)
 	return c.RenderJSON(response)

@@ -1,0 +1,14 @@
+{
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anikitenko/mini-sftp-client.git"
+  },
+  "homepage": "https://github.com/anikitenko/mini-sftp-client#readme",
+  "scripts": {
+    "cypress:open": "cypress open"
+  },
+  "devDependencies": {
+    "cypress": "^3.0.1"
+  }
+}

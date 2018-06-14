@@ -1,40 +1,47 @@
-let localPathSeparator = "/",
-    remoteHome = "",
+let remoteHome = "",
     localHome = "",
     connectionName = "New Connection";
 
 window.onbeforeunload = function () {
-    return "Are you sure you wish to leave the page?";
+    const sshIPValue = $.trim($("#sshIp").val());
+    if (sshIPValue !== "" && sshIPValue !== undefined) {
+        if (sshIPValue !== "sftp-mock-test") {
+            return "Are you sure you wish to leave the page?";
+        }
+    }
 };
 
 $.notifyDefaults({
     newest_on_top: true
 });
 
+$.notifyClose('top-right');
+
 $('[data-toggle="tooltip"]').tooltip({
     trigger: 'hover'
 });
 
+function sendNotify(text, type) {
+    let icon = "";
+    if (type === "warning" || type === "danger") {
+        icon = "glyphicon glyphicon-warning-sign"
+    }
+    $.notify({
+            message: text,
+            icon: icon
+        }, {
+            type: type,
+            timer: 50
+        });
+}
+
 $(document).ajaxError(function (event, jqxhr) {
-    $.notifyClose('top-right');
     if (jqxhr.status === 500 || jqxhr.status === 502) {
-        $.notify(
-            {
-                message: "Something went wrong!",
-                icon: 'glyphicon glyphicon-warning-sign'
-            }, {type: 'danger', timer: 50});
+        sendNotify("Something went wrong!", "danger");
     } else if (jqxhr.status === 404) {
-        $.notify(
-            {
-                message: "Requested resource not found!",
-                icon: 'glyphicon glyphicon-warning-sign'
-            }, {type: 'danger', timer: 50});
+        sendNotify("Requested resource not found!", "danger");
     } else if (jqxhr.status === 403) {
-        $.notify(
-            {
-                message: "You don't have permission to resource you are trying to access!",
-                icon: 'glyphicon glyphicon-warning-sign'
-            }, {type: 'danger', timer: 50});
+        sendNotify("You don't have permission to resource you are trying to access!", "danger");
     }
 });
 
@@ -43,16 +50,21 @@ $(function () {
         type: 'text',
         mode: 'inline',
         onblur: 'submit',
-        display: function (value) {
+        display: function () {
             $(this).text(connectionName);
         },
         success: function (response, val) {
             connectionName = $.trim(val);
             document.title = connectionName;
             if (connectionName !== "") {
-                $.notify("Connection name set to '" + connectionName + "'", {type: 'success', timer: 50});
+                sendNotify("Connection name set to '" + connectionName + "'", "success");
             }
         }
+    });
+
+    $(".mainForm").on("submit", function (e) {
+        e.preventDefault();
+        $("#sshConnect").trigger("click");
     });
 
     $("#sshConnect").on("click", function (e) {
@@ -76,22 +88,11 @@ $(function () {
         }, function (response) {
             if (response["result"]) {
                 let localPath = response["local_path"],
-                    remotePath = response["remote_path"],
-                    htmlBlockLocal = "";
-                localPathSeparator = response["local_path_separator"];
+                    remotePath = response["remote_path"];
                 remoteHome = response["remote_path"];
                 localHome = response["local_path"];
                 if (response["errors"] !== null) {
-                    $.notify(
-                        {
-                            message: "We found the following errors: " + response["errors"].join(", "),
-                            icon: 'glyphicon glyphicon-warning-sign'
-                        },
-                        {
-                            type: 'warning',
-                            timer: 50
-                        }
-                    );
+                    sendNotify("We found the following errors: " + response["errors"].join(", "), "warning");
                 }
                 $("#remoteConnectionName").text(sshUser + "@" + sshIP + ":").parent().attr("title", sshUser + "@" + sshIP).tooltip({
                     title: sshUser + "@" + sshIP
@@ -121,16 +122,7 @@ $(function () {
                 $("#testSSHConnection").prop("disabled", true);
                 $(_this).find("span.ladda-label").text("ReConnect!");
             } else {
-                $.notify(
-                    {
-                        message: response["message"],
-                        icon: 'glyphicon glyphicon-warning-sign'
-                    },
-                    {
-                        type: 'danger',
-                        timer: 50
-                    }
-                );
+                sendNotify(response["message"], "danger");
             }
         }, 'json').always(function () {
             l.stop();
@@ -155,23 +147,11 @@ $(function () {
             ssh_port: sshPort
         }, function (response) {
             if (response["result"]) {
-                $.notify("SSH connection was established successfully to '" + sshIP + ":" + sshPort + "'", {
-                    type: 'success',
-                    timer: 50
-                });
+                sendNotify("SSH connection was established successfully to '" + sshIP + ":" + sshPort + "'", "success");
             } else {
-                $.notify(
-                    {
-                        message: response["message"],
-                        icon: 'glyphicon glyphicon-warning-sign'
-                    },
-                    {
-                        type: 'danger',
-                        timer: 50
-                    }
-                );
+                sendNotify(response["message"], "danger");
             }
-        }, 'json').always(function () {
+        }, 'json').always(function() {
             l.stop();
         });
     });
@@ -243,49 +223,33 @@ $(function () {
                     });
                 }
             } else {
-                $.notify(
-                    {
-                        message: response["message"],
-                        icon: 'glyphicon glyphicon-warning-sign'
-                    },
-                    {
-                        type: 'danger',
-                        timer: 50
-                    }
-                );
+                sendNotify(response["message"], "danger");
             }
         }, 'json');
     });
 
-    $(".localCreateNewDire").on("click", function () {
-        let newDirName = prompt("Please enter new directory name");
-        newDirName = $.trim(newDirName);
-        if (newDirName === "") {
-            return
-        }
-
-        $.post("/createNewLocalDirectory", {path: $('#localPath').val(), name: newDirName}, function (response) {
-            if (response["result"]) {
-                let newPath = response["new_path"];
-                $('#localPath').select2("trigger", "select", {
-                    data: {
-                        id: newPath,
-                        text: newPath
+    $(".localCreateNewDir").on("click", function () {
+        bootbox.prompt({
+            title: "Please enter new directory name",
+            callback: function (newDirName) {
+                if ($.trim(newDirName) === "") {
+                    return
+                }
+                $.post("/createNewLocalDirectory", {path: $('#localPath').val(), name: newDirName}, function (response) {
+                    if (response["result"]) {
+                        let newPath = response["new_path"];
+                        $('#localPath').select2("trigger", "select", {
+                            data: {
+                                id: newPath,
+                                text: newPath
+                            }
+                        });
+                    } else {
+                        sendNotify(response["message"], "danger");
                     }
-                });
-            } else {
-                $.notify(
-                    {
-                        message: response["message"],
-                        icon: 'glyphicon glyphicon-warning-sign'
-                    },
-                    {
-                        type: 'danger',
-                        timer: 50
-                    }
-                );
+                }, 'json')
             }
-        }, 'json');
+        });
     });
 
     $("#searchRemoteFiles").on("keyup", function () {

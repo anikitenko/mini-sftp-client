@@ -13,6 +13,7 @@ import (
 // result: true for success/false for any error
 // message: empty if success, message if error
 // local_files: list of local files
+// local_path_separator: local separator which is needed for navigation compatible with Windows/*nix based systems
 func (c App) LocalPathGoTo() revel.Result {
 	var localFilesList []FileStructureStruct
 
@@ -66,6 +67,7 @@ func (c App) LocalPathGoTo() revel.Result {
 			}
 		}
 		data["local_files"] = localFilesList
+		data["local_path_separator"] = string(filepath.Separator)
 	default:
 		logger.Warnf("Specified path is not a directory: %v", err)
 		response := CompileJSONResult(false, "Specified path is not a directory")
