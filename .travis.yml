@@ -30,24 +30,23 @@ script:
   - "$(npm bin)/cypress run --record"
   - kill $(jobs -p) || true
   - go build -o ./run/run.tmp ./run
+  - |
+      if [[ "$TRAVIS_OS_NAME" == "osx" && "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
+        export TO_DEPLOY="yes"
+      fi
 
 before_deploy:
   - |
-     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      if [[ "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
         brew install jshon
         export BODY=$(jshon -s "$(cat CHANGELOG.md)"))
-
         mkdir artifacts
-
-        if [[ "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
-          export TO_DEPLOY="yes"
-          export PRE_RELEASE=false
-          bash deploy.sh
-          if [[ "$TRAVIS_TAG" =~ -.+ ]]; then
-            export PRE_RELEASE=true
-          fi
+        export PRE_RELEASE=false
+        bash deploy.sh
+        if [[ "$TRAVIS_TAG" =~ -.+ ]]; then
+          export PRE_RELEASE=true
         fi
-     fi
+      fi
 
 deploy:
   provider: releases
