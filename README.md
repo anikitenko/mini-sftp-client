@@ -19,6 +19,19 @@ and pickup the latest version for your OS
 * When prompted enter port to listen on (ex. 9000)
 * Access http://127.0.0.1:9000 (if you choosed port 9000) for your browser
 
+### Want to run as a docker image? Okay:
+Get mini sftp client:
+
+    git clone git@github.com:anikitenko/mini-sftp-client.git
+    
+Run:
+
+    docker build -t mini-sftp-client .
+    
+Start:
+
+    docker run -p <local port>:9000 mini-sftp-client
+
 ### Run from sources
 
 Prerequisite:
