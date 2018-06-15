@@ -17,22 +17,38 @@ and pickup the latest version for your OS
 * Run run.exe for Windows OR ./run for Linux/OS X
 * The run file will check for any updates
 * When prompted enter port to listen on (ex. 9000)
-* Access http://127.0.0.1:9000 (if you choosed port 9000) for your browser
+* Access http://127.0.0.1:9000 (if you choose port 9000) for your browser
 
-### Want to run as a docker image? Okay:
+## Benefits and Key features
+- [x] Nothing to install: unzip and run. Use different tabs for different connections
+- [x] Runs on Linux, OS X, Windows
+- [x] Run client for all interfaces and access client from mobile device and manage files
+- [x] Run client on your file server (possible Linux based, Windows, OS X) and access from your desktop or mobile
+
+## Security
+Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
+
+### Want to run as a docker image?
+#### Build from sources:
+
 Get mini sftp client:
 
     git clone git@github.com:anikitenko/mini-sftp-client.git
     
+Build:
+
+    cd mini-sftp-client && docker build -t mini-sftp-client .
+    
 Run:
 
-    docker build -t mini-sftp-client .
-    
-Start:
-
     docker run -p <local port>:9000 mini-sftp-client
+    
+#### Run from Docker hub:
 
-### Run from sources
+    docker pull anikitenko/mini-sftp-client
+    docker run anikitenko/mini-sftp-client
+
+### Run client from sources
 
 Prerequisite:
 
@@ -52,19 +68,10 @@ Resolve dependencies:
     cd mini-sftp-client
     govendor sync
     
-Run app:
+Run client:
 
     cd ..
     revel run mini-sftp-client
-    
-## Benefits and Key features
-- [x] Nothing to install: unzip and run. Use different tabs for different connections
-- [x] Runs on Linux, OS X, Windows
-- [x] Run client for all interfaces and access client from mobile device and manage files
-- [x] Run client on your file server (possible Linux based, Windows, OS X) and access from your desktop or mobile
-
-## Security
-Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
     
 ## Usage
 
