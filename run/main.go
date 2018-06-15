@@ -9,10 +9,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"flag"
 )
 
 var (
 	releaseUrl = "https://api.github.com/repos/anikitenko/mini-sftp-client/releases/latest"
+	PortToListen = flag.String("p", "", "Port to listen on")
+	RunMode = flag.String("m", "prod", "Run mode: dev OR prod")
+	NoVersionCheck = flag.Bool("no-ver-check", false, "Skip version check?")
 )
 
 type releaseInfo struct {
@@ -23,6 +27,14 @@ type releaseInfo struct {
 }
 
 func main() {
+
+	flag.Parse()
+
+	if *NoVersionCheck {
+		StartClient()
+		return
+	}
+
 	fmt.Println("Checking for updates...")
 
 	appVersion, err := ioutil.ReadFile(".version")
@@ -34,7 +46,10 @@ func main() {
 
 	releaseFound, err := getReleaseInfo()
 	if err != nil {
-		if err.Error() != "url not found" {
+		switch err.Error() {
+		case "url not found":
+		case "invalid data":
+		default:
 			logger.Warnf("Problem with checking for updates: %v", err)
 		}
 		StartClient()

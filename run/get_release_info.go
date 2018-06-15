@@ -38,12 +38,27 @@ func getReleaseInfo() (*releaseInfo, error) {
 		if !ok {
 			_ = errors.New("invalid data")
 		}
-		assetName := m["name"].(string)
-		browserDownload := m["browser_download_url"].(string)
-		assetSize, err := m["size"].(json.Number).Int64()
+
+		assetName, ok := m["name"].(string)
+		if !ok {
+			_ = errors.New("invalid data")
+		}
+
+		browserDownload, ok := m["browser_download_url"].(string)
+		if !ok {
+			_ = errors.New("invalid data")
+		}
+
+		assetSizeJSON, ok := m["size"].(json.Number)
+		if !ok {
+			_ = errors.New("invalid data")
+		}
+
+		assetSize, err := assetSizeJSON.Int64()
 		if err != nil {
 			return nil, err
 		}
+
 		info.Name = assetName
 		info.URL = browserDownload
 

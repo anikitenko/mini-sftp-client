@@ -20,17 +20,22 @@ func StartClient() {
 	}
 	fmt.Println("Starting client...")
 
-	readPort := bufio.NewReader(os.Stdin)
-	fmt.Print("Port to listen on: ")
-	portToListen, _ := readPort.ReadString('\n')
-	portToListen = strings.TrimSuffix(portToListen, "\n")
-	portToListen = strings.TrimSuffix(portToListen, "\r")
+	if *PortToListen == "" {
+		readPort := bufio.NewReader(os.Stdin)
+		fmt.Print("Port to listen on: ")
+		*PortToListen, _ = readPort.ReadString('\n')
+		*PortToListen = strings.TrimSuffix(*PortToListen, "\n")
+		*PortToListen = strings.TrimSuffix(*PortToListen, "\r")
+	}
 
-	if _, err := strconv.Atoi(portToListen); err != nil {
+	if _, err := strconv.Atoi(*PortToListen); err != nil {
 		logger.Fatalf("Port should be a number: %v", err)
 	}
 
-	client := exec.Command("mini-sftp-client-"+goOS+extension, "-importPath", "mini-sftp-client", "-runMode", "prod", "-port", portToListen)
+	if err := os.Setenv("GOPATH", "."); err != nil {
+		logger.Fatalf("Failed to temporary set environment variable: %v", err)
+	}
+	client := exec.Command("./mini-sftp-client-"+goOS+extension, "-importPath", "github.com/anikitenko/mini-sftp-client", "-runMode", *RunMode, "-port", *PortToListen)
 
 	stdout, err := client.StdoutPipe()
 	if nil != err {

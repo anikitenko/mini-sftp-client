@@ -88,12 +88,16 @@ $(function () {
         }, function (response) {
             if (response["result"]) {
                 let localPath = response["local_path"],
-                    remotePath = response["remote_path"];
+                    remotePath = response["remote_path"],
+                    pinCode = response["pin_code"];
                 remoteHome = response["remote_path"];
                 localHome = response["local_path"];
                 if (response["errors"] !== null) {
                     sendNotify("We found the following errors: " + response["errors"].join(", "), "warning");
                 }
+
+                $("#pinCode").text(pinCode);
+
                 $("#remoteConnectionName").text(sshUser + "@" + sshIP + ":").parent().attr("title", sshUser + "@" + sshIP).tooltip({
                     title: sshUser + "@" + sshIP
                 });
@@ -147,6 +151,8 @@ $(function () {
             ssh_port: sshPort
         }, function (response) {
             if (response["result"]) {
+                let pinCode = response["pin_code"];
+                $("#pinCode").text(pinCode);
                 sendNotify("SSH connection was established successfully to '" + sshIP + ":" + sshPort + "'", "success");
             } else {
                 sendNotify(response["message"], "danger");

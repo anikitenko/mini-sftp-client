@@ -3,17 +3,25 @@
 cd "$TRAVIS_BUILD_DIR"
 
 rm -rf node_modules
-revel build github.com/anikitenko/mini-sftp-client mini-sftp-osx
-GOOS=linux revel build github.com/anikitenko/mini-sftp-client mini-sftp-linux
-GOOS=windows revel build github.com/anikitenko/mini-sftp-client mini-sftp-windows
+CGO_ENABLED=0 revel build github.com/anikitenko/mini-sftp-client mini-sftp-osx
+CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client mini-sftp-linux
+CGO_ENABLED=0 GOOS=windows revel build github.com/anikitenko/mini-sftp-client mini-sftp-windows
 
-rm -rf mini-sftp-osx/src mini-sftp-osx/run.sh mini-sftp-osx/run.bat
-rm -rf mini-sftp-linux/src mini-sftp-linux/run.sh mini-sftp-linux/run.bat
-rm -rf mini-sftp-windows/src mini-sftp-windows/run.sh mini-sftp-windows/run.bat
+find mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client \
+ -maxdepth 1 ! -path mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client \
+ -not -name app -not -name conf -not -name public -exec rm -rf {} +
 
-go build -o ./mini-sftp-osx/run ./run && chmod +x ./mini-sftp-osx/run
-GOOS=linux go build -o ./mini-sftp-linux/run ./run && chmod +x ./mini-sftp-linux/run
-GOOS=windows go build -o ./mini-sftp-windows/run.exe ./run
+find mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client \
+ -maxdepth 1 ! -path mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client \
+ -not -name app -not -name conf -not -name public -exec rm -rf {} +
+
+find mini-sftp-windows/src/github.com/anikitenko/mini-sftp-client \
+ -maxdepth 1 ! -path mini-sftp-windows/src/github.com/anikitenko/mini-sftp-client \
+ -not -name app -not -name conf -not -name public -exec rm -rf {} +
+
+CGO_ENABLED=0 go build -o ./mini-sftp-osx/run ./run && chmod +x ./mini-sftp-osx/run
+CGO_ENABLED=0 GOOS=linux go build -o ./mini-sftp-linux/run ./run && chmod +x ./mini-sftp-linux/run
+CGO_ENABLED=0 GOOS=windows go build -o ./mini-sftp-windows/run.exe ./run
 
 mv mini-sftp-osx/mini-sftp-client mini-sftp-osx/mini-sftp-client-darwin
 mv mini-sftp-linux/mini-sftp-client mini-sftp-linux/mini-sftp-client-linux
