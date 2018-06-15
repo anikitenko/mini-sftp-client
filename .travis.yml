@@ -53,7 +53,7 @@ deploy:
   body: ${BODY}
   prerelease: $PRE_RELEASE
   file_glob: true
-  file: artifacts/*
+  file: ../artifacts/*
   skip_cleanup: true
   on:
     tags: true
