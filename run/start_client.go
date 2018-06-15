@@ -20,19 +20,19 @@ func StartClient() {
 	}
 	fmt.Println("Starting client...")
 
-	if !PortViaCmd {
+	if *PortToListen == "" {
 		readPort := bufio.NewReader(os.Stdin)
 		fmt.Print("Port to listen on: ")
-		PortToListen, _ = readPort.ReadString('\n')
-		PortToListen = strings.TrimSuffix(PortToListen, "\n")
-		PortToListen = strings.TrimSuffix(PortToListen, "\r")
+		*PortToListen, _ = readPort.ReadString('\n')
+		*PortToListen = strings.TrimSuffix(*PortToListen, "\n")
+		*PortToListen = strings.TrimSuffix(*PortToListen, "\r")
 	}
 
-	if _, err := strconv.Atoi(PortToListen); err != nil {
+	if _, err := strconv.Atoi(*PortToListen); err != nil {
 		logger.Fatalf("Port should be a number: %v", err)
 	}
 
-	client := exec.Command("mini-sftp-client-"+goOS+extension, "-importPath", "mini-sftp-client", "-runMode", RunMode, "-port", PortToListen)
+	client := exec.Command("mini-sftp-client-"+goOS+extension, "-importPath", "mini-sftp-client", "-runMode", *RunMode, "-port", *PortToListen)
 
 	stdout, err := client.StdoutPipe()
 	if nil != err {

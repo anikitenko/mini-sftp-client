@@ -9,14 +9,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"flag"
 )
 
 var (
 	releaseUrl = "https://api.github.com/repos/anikitenko/mini-sftp-client/releases/latest"
-	PortToListen string
-	RunMode string
-	PortViaCmd bool
-	NoVersionCheck bool
+	PortToListen = flag.String("p", "", "Port to listen on")
+	RunMode = flag.String("m", "prod", "Run mode: dev OR prod")
+	NoVersionCheck = flag.Bool("no-ver-check", false, "Skip version check?")
 )
 
 type releaseInfo struct {
@@ -27,30 +27,10 @@ type releaseInfo struct {
 }
 
 func main() {
-	if len(os.Args) > 2 {
-		if os.Args[1] == "-p" {
-			PortToListen = os.Args[2]
-			PortViaCmd = true
-		}
 
-		if len(os.Args) > 4 {
-			if os.Args[3] == "-m" {
-				RunMode = os.Args[4]
-			} else {
-				RunMode = "prod"
-			}
-		} else {
-			RunMode = "prod"
-		}
+	flag.Parse()
 
-		if len(os.Args) > 5 {
-			if os.Args[5] == "--no-ver-check" {
-				NoVersionCheck = true
-			}
-		}
-	}
-
-	if NoVersionCheck {
+	if *NoVersionCheck {
 		StartClient()
 		return
 	}
