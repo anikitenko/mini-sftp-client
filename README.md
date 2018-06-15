@@ -41,12 +41,12 @@ Build:
     
 Run:
 
-    docker run -p <local port>:9000 mini-sftp-client
+    docker run -p <local port>:9000 --rm mini-sftp-client
     
 #### Run from Docker hub:
 
     docker pull anikitenko/mini-sftp-client
-    docker run anikitenko/mini-sftp-client
+    docker run --rm anikitenko/mini-sftp-client
 
 ### Run client from sources
 
