@@ -7,15 +7,15 @@ CGO_ENABLED=0 revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-os
 CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-linux
 CGO_ENABLED=0 GOOS=windows revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-windows
 
+CGO_ENABLED=0 go build -o ../run-osx github.com/anikitenko/mini-sftp-client/run && chmod +x ../run-osx
+CGO_ENABLED=0 GOOS=linux go build -o ../run-linux github.com/anikitenko/mini-sftp-client/run && chmod +x ../run-linux
+CGO_ENABLED=0 GOOS=windows go build -o ../run.exe github.com/anikitenko/mini-sftp-client/run
+
 cd ..
 
 rm -f mini-sftp-osx/run.sh mini-sftp-osx/run.bat
 rm -f mini-sftp-linux/run.sh mini-sftp-linux/run.bat
 rm -f mini-sftp-windows/run.sh mini-sftp-windows/run.bat
-
-CGO_ENABLED=0 go build -o ./run-osx ./mini-sftp-osx/run && chmod +x ./run-osx
-CGO_ENABLED=0 GOOS=linux go build -o ./run-linux ./mini-sftp-linux/run && chmod +x ./run-linux
-CGO_ENABLED=0 GOOS=windows go build -o ./run.exe ./mini-sftp-windows/run
 
 find 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client' \
  -maxdepth 1 ! -path 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client' \
