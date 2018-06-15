@@ -49,6 +49,7 @@ func (c App) ConnectViaSSH() revel.Result {
 	data["local_path"] = homeDirectory
 
 	data["errors"] = resultMessage
+	data["pin_code"] = PinCode
 
 	response := CompileJSONResult(true, "", data)
 	return c.RenderJSON(response)
