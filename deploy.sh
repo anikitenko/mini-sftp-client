@@ -12,6 +12,7 @@ CGO_ENABLED=0 GOOS=linux go build -o ../run-linux github.com/anikitenko/mini-sft
 CGO_ENABLED=0 GOOS=windows go build -o ../run.exe github.com/anikitenko/mini-sftp-client/run
 
 cd ..
+mkdir artifacts
 
 rm -f mini-sftp-osx/run.sh mini-sftp-osx/run.bat
 rm -f mini-sftp-linux/run.sh mini-sftp-linux/run.bat
