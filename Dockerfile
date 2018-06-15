@@ -14,8 +14,12 @@ RUN cd mini-sftp-client && govendor sync
 
 RUN CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client sftp-client
 
-RUN rm -rf sftp-client/src sftp-client/run.sh sftp-client/run.bat && \
+RUN rm -f sftp-client/run.sh sftp-client/run.bat && \
     mv sftp-client/mini-sftp-client sftp-client/mini-sftp-client-linux
+
+RUN find sftp-client/src/github.com/anikitenko/mini-sftp-client \
+ -maxdepth 1 ! -path sftp-client/src/github.com/anikitenko/mini-sftp-client \
+ -not -name app -not -name conf -not -name public -exec rm -rf {} +
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o sftp-client/start-client github.com/anikitenko/mini-sftp-client/run
 
@@ -28,4 +32,4 @@ WORKDIR /app
 
 COPY --from=build /go/src/github.com/anikitenko/sftp-client /app/
 
-ENTRYPOINT ["./start-client", "-p", "9000", "-m", "dev", "--no-ver-check"]
+CMD ["./start-client", "-p", "9000", "-m", "dev", "--no-ver-check"]
