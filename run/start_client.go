@@ -32,7 +32,7 @@ func StartClient() {
 		logger.Fatalf("Port should be a number: %v", err)
 	}
 
-	client := exec.Command("mini-sftp-client-"+goOS+extension, "-importPath", "mini-sftp-client", "-runMode", *RunMode, "-port", *PortToListen)
+	client := exec.Command("./mini-sftp-client-"+goOS+extension, "-importPath", "mini-sftp-client", "-runMode", *RunMode, "-port", *PortToListen)
 
 	stdout, err := client.StdoutPipe()
 	if nil != err {
