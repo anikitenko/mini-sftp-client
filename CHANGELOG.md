@@ -1,5 +1,10 @@
 ## [v1.0.0-RC4](#v100-rc4)
-Fix critical issue. Client is not starting up
+Features:
+* Added docker support
+* Pin code is updated even if server was restarted
+
+Fixes:
+* Fix critical issue. Client is not starting up
 
 ## [v1.0.0-RC3](#v100-rc3)
 Features:
