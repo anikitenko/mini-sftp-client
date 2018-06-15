@@ -39,7 +39,6 @@ script:
 before_deploy:
   - |
       export BODY="Detailed release information can be found at [CHANGELOG.md $TRAVIS_TAG](https://github.com/anikitenko/mini-sftp-client/blob/master/CHANGELOG.md#$(echo $TRAVIS_TAG | sed -e 's/\.//g' | tr '[:upper:]' '[:lower:]'))"
-      mkdir artifacts
       export PRE_RELEASE=false
       bash deploy.sh
       if [[ "$TRAVIS_TAG" =~ -.+ ]]; then
@@ -54,7 +53,7 @@ deploy:
   body: ${BODY}
   prerelease: $PRE_RELEASE
   file_glob: true
-  file: artifacts/*
+  file: ../artifacts/*
   skip_cleanup: true
   on:
     tags: true
