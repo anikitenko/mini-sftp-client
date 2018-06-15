@@ -12,3 +12,6 @@ Please open a new issue with information about how to reproduce it
 
 * Open a new GitHub pull request with the patch.
 * Please fill in template about new pull request
+
+#### **Other information**
+* Branches master & staging are protected against writes without pull requests
