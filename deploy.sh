@@ -3,35 +3,44 @@
 cd "$TRAVIS_BUILD_DIR"
 
 rm -rf node_modules
-CGO_ENABLED=0 revel build github.com/anikitenko/mini-sftp-client mini-sftp-osx
-CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client mini-sftp-linux
-CGO_ENABLED=0 GOOS=windows revel build github.com/anikitenko/mini-sftp-client mini-sftp-windows
+CGO_ENABLED=0 revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-osx
+CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-linux
+CGO_ENABLED=0 GOOS=windows revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-windows
+
+cd ..
 
 rm -f mini-sftp-osx/run.sh mini-sftp-osx/run.bat
 rm -f mini-sftp-linux/run.sh mini-sftp-linux/run.bat
 rm -f mini-sftp-windows/run.sh mini-sftp-windows/run.bat
 
+CGO_ENABLED=0 go build -o ./run-osx ./mini-sftp-osx/run && chmod +x ./run-osx
+CGO_ENABLED=0 GOOS=linux go build -o ./run-linux ./mini-sftp-linux/run && chmod +x ./run-linux
+CGO_ENABLED=0 GOOS=windows go build -o ./run.exe ./mini-sftp-windows/run
+
 find 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client' \
  -maxdepth 1 ! -path 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client' \
  -not -name 'app' \
  -not -name 'conf' \
- -not -name 'public'
+ -not -name 'public' \
+ -exec rm -rf {} +
 
 find 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client' \
  -maxdepth 1 ! -path 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client' \
  -not -name 'app' \
  -not -name 'conf' \
- -not -name 'public'
+ -not -name 'public' \
+ -exec rm -rf {} +
 
 find 'mini-sftp-windows/src/github.com/anikitenko/mini-sftp-client' \
  -maxdepth 1 ! -path 'mini-sftp-windows/src/github.com/anikitenko/mini-sftp-client' \
  -not -name 'app' \
  -not -name 'conf' \
- -not -name 'public'
+ -not -name 'public' \
+ -exec rm -rf {} +
 
-CGO_ENABLED=0 go build -o ./mini-sftp-osx/run ./run && chmod +x ./mini-sftp-osx/run
-CGO_ENABLED=0 GOOS=linux go build -o ./mini-sftp-linux/run ./run && chmod +x ./mini-sftp-linux/run
-CGO_ENABLED=0 GOOS=windows go build -o ./mini-sftp-windows/run.exe ./run
+mv run-osx mini-sftp-osx/run
+mv run-linux mini-sftp-linux/run
+mv run.exe mini-sftp-windows/run.exe
 
 mv mini-sftp-osx/mini-sftp-client mini-sftp-osx/mini-sftp-client-darwin
 mv mini-sftp-linux/mini-sftp-client mini-sftp-linux/mini-sftp-client-linux
