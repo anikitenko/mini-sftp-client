@@ -13,21 +13,21 @@ rm -f mini-sftp-windows/run.sh mini-sftp-windows/run.bat
 
 find 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client' \
  -maxdepth 1 ! -path 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client' \
- -not -name 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client/app' \
- -not -name 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client/conf' \
- -not -name 'mini-sftp-osx/src/github.com/anikitenko/mini-sftp-client/public' -exec rm -rf {} +
+ -not -name 'app' \
+ -not -name 'conf' \
+ -not -name 'public' -exec rm -rf {} +
 
 find 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client' \
  -maxdepth 1 ! -path 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client' \
- -not -name 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client/app' \
- -not -name 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client/conf' \
- -not -name 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client/public' -exec rm -rf {} +
+ -not -name 'app' \
+ -not -name 'conf' \
+ -not -name 'public' -exec rm -rf {} +
 
 find 'mini-sftp-windows/src/github.com/anikitenko/mini-sftp-client' \
  -maxdepth 1 ! -path 'mini-sftp-windows/src/github.com/anikitenko/mini-sftp-client' \
- -not -name 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client/app' \
- -not -name 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client/conf' \
- -not -name 'mini-sftp-linux/src/github.com/anikitenko/mini-sftp-client/public' -exec rm -rf {} +
+ -not -name 'app' \
+ -not -name 'conf' \
+ -not -name 'public' -exec rm -rf {} +
 
 CGO_ENABLED=0 go build -o ./mini-sftp-osx/run ./run && chmod +x ./mini-sftp-osx/run
 CGO_ENABLED=0 GOOS=linux go build -o ./mini-sftp-linux/run ./run && chmod +x ./mini-sftp-linux/run
