@@ -1,5 +1,5 @@
 # Building - Step 1
-FROM golang:1.10 AS build
+FROM golang:1.9 AS build
 
 RUN mkdir -p $GOPATH/src/github.com/anikitenko
 
