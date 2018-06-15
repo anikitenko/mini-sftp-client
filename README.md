@@ -17,7 +17,7 @@ and pickup the latest version for your OS
 * Run run.exe for Windows OR ./run for Linux/OS X
 * The run file will check for any updates
 * When prompted enter port to listen on (ex. 9000)
-* Access http://127.0.0.1:9000 (if you choose port 9000) for your browser
+* Access http://127.0.0.1:9000 (if you choose port 9000) from your browser
 
 ## Benefits and Key features
 - [x] Nothing to install: unzip and run. Use different tabs for different connections
@@ -47,6 +47,11 @@ Run:
 
     docker pull anikitenko/mini-sftp-client
     docker run --rm anikitenko/mini-sftp-client
+    
+Tags:
+* latest: staging branch
+* stable: master branch
+* vx.x.x: tags in repository
 
 ### Run client from sources
 
