@@ -29,6 +29,16 @@ and pickup the latest version for your OS
 Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
 
 ### Want to run as a docker image?
+#### Run from Docker hub:
+
+    docker pull anikitenko/mini-sftp-client
+    docker run -p <local port>:9000 --rm anikitenko/mini-sftp-client
+    
+Tags:
+* latest: staging branch
+* stable: master branch
+* vx.x.x: tags in repository
+
 #### Build from sources:
 
 Get mini sftp client:
@@ -42,16 +52,6 @@ Build:
 Run:
 
     docker run -p <local port>:9000 --rm mini-sftp-client
-    
-#### Run from Docker hub:
-
-    docker pull anikitenko/mini-sftp-client
-    docker run --rm anikitenko/mini-sftp-client
-    
-Tags:
-* latest: staging branch
-* stable: master branch
-* vx.x.x: tags in repository
 
 ### Run client from sources
 
