@@ -4,6 +4,7 @@
 [![Cypress.io tests](https://img.shields.io/badge/cypress.io-tests-green.svg?style=flat-square)](https://cypress.io)
 [![Build Status](https://travis-ci.org/anikitenko/mini-sftp-client.svg?branch=staging)](https://travis-ci.org/anikitenko/mini-sftp-client)
 [![CodeFactor](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client/badge)](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fanikitenko%2Fmini-sftp-client.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fanikitenko%2Fmini-sftp-client?ref=badge_shield)
 
 This is a mini web based sFTP client written on Go using Revel Framework
 
@@ -131,3 +132,7 @@ you will be able to distinguish different connections
     * Go UP: navigates you to parent directory
     * Create New Directory: create new empty directory and navigate to it
     * Refresh: refresh current directory
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fanikitenko%2Fmini-sftp-client.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fanikitenko%2Fmini-sftp-client?ref=badge_large)
