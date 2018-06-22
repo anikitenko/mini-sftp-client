@@ -1,17 +1,18 @@
 package controllers
 
 import (
+	"fmt"
 	logger "github.com/sirupsen/logrus"
+	"golang.org/x/crypto/ssh"
+	"io"
 	"os"
 	"path/filepath"
-	"io"
-	"fmt"
 	"time"
 )
 
-func downloadDirectory(sourcePath, localPath, fileName string) (string, error) {
+func DownloadDirectory(sourcePath, localPath, fileName string, session *ssh.Session) (string, error) {
 	var errorMessage string
-	stdoutNewPipe, err := SSHsession.StdoutPipe()
+	stdoutNewPipe, err := session.StdoutPipe()
 	if err != nil {
 		errorMessage = "Cannot create a pipe to download folder"
 		return errorMessage, err
@@ -25,7 +26,7 @@ func downloadDirectory(sourcePath, localPath, fileName string) (string, error) {
 		return errorMessage, err
 	}
 
-	if err := SSHsession.Start("tar cz --directory='" + sourcePath + "' '" + fileName + "'"); err != nil {
+	if err := session.Start("tar cz --directory='" + sourcePath + "' '" + fileName + "'"); err != nil {
 		errorMessage = "Problem with running command via SSH"
 		return errorMessage, err
 	}
@@ -40,7 +41,7 @@ func downloadDirectory(sourcePath, localPath, fileName string) (string, error) {
 
 	logger.Infof("Transferred %s", FormatBytes(float64(numberTransferred)))
 
-	SSHsession.Close()
+	session.Close()
 	tempArchiveFile.Close()
 
 	if errorMessage, err = UnTarArchive(tempArchiveName, localPath); err != nil {

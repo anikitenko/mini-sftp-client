@@ -8,6 +8,7 @@ import (
 
 	"github.com/revel/revel"
 	logger "github.com/sirupsen/logrus"
+	"golang.org/x/crypto/ssh"
 )
 
 // GetRemotePathCompletion acts like double tab for remote and returns JSON which contains:
@@ -15,8 +16,6 @@ import (
 // message: empty if success, message if error
 // items: list of found files/folders
 func (c App) GetRemotePathCompletion() revel.Result {
-	var dataCompletion []map[string]interface{}
-
 	path := c.Params.Get("path")
 	data := make(map[string]interface{})
 
@@ -27,11 +26,26 @@ func (c App) GetRemotePathCompletion() revel.Result {
 	defer SSHsession.Close()
 	defer SSHclient.Close()
 
-	dataResult, err := SSHsession.Output(`compgen -o default ` + path)
+	dataCompletion, errString, err := RemotePathCompletion(SSHsession, path)
 	if err != nil {
-		logger.Warnf("Problem with getting path: %v", err)
-		response := CompileJSONResult(false, "Problem with getting path")
+		logger.Warnf("%s: %v", errString, err)
+		response := CompileJSONResult(false, errString)
 		return c.RenderJSON(response)
+	}
+
+	data["items"] = dataCompletion
+	response := CompileJSONResult(true, "", data)
+	return c.RenderJSON(response)
+}
+
+func RemotePathCompletion(session *ssh.Session, path string) ([]map[string]interface{}, string, error) {
+	var dataCompletion []map[string]interface{}
+	var errorMessage string
+
+	dataResult, err := session.Output(`compgen -o default ` + path)
+	if err != nil {
+		errorMessage = "Problem with getting path"
+		return dataCompletion, errorMessage, err
 	}
 
 	listOfCompletionFound := strings.Split(string(dataResult), "\n")
@@ -45,9 +59,7 @@ func (c App) GetRemotePathCompletion() revel.Result {
 		dataCompletion = append(dataCompletion, dirFilePath)
 	}
 
-	data["items"] = dataCompletion
-	response := CompileJSONResult(true, "", data)
-	return c.RenderJSON(response)
+	return dataCompletion, "", nil
 }
 
 // GetLocalPathCompletion acts like double tab for local and returns JSON which contains:
@@ -55,20 +67,31 @@ func (c App) GetRemotePathCompletion() revel.Result {
 // message: empty if success, message if error
 // items: list of found files/folders
 func (c App) GetLocalPathCompletion() revel.Result {
-	var (
-		dataCompletion []map[string]interface{}
-	)
-
 	path := c.Params.Get("path")
 	data := make(map[string]interface{})
+
+	dataCompletion, errString, err := LocalPathCompletion(path)
+	if err != nil {
+		logger.Warnf("%s: %v", errString, err)
+		response := CompileJSONResult(false, errString)
+		return c.RenderJSON(response)
+	}
+
+	data["items"] = dataCompletion
+	response := CompileJSONResult(true, "", data)
+	return c.RenderJSON(response)
+}
+
+func LocalPathCompletion(path string) ([]map[string]interface{}, string, error) {
+	var dataCompletion []map[string]interface{}
+	var errorMessage string
 
 	directory, file := filepath.Split(path)
 
 	listDirectory, err := ioutil.ReadDir(directory)
 	if err != nil {
-		logger.Warnf("Problem with listing directory: %v", err)
-		response := CompileJSONResult(false, "Problem with listing directory")
-		return c.RenderJSON(response)
+		errorMessage = "Problem with listing directory"
+		return dataCompletion, errorMessage, err
 	}
 
 	r := regexp.MustCompile(`^` + file)
@@ -80,7 +103,6 @@ func (c App) GetLocalPathCompletion() revel.Result {
 			dataCompletion = append(dataCompletion, dirFilePath)
 		}
 	}
-	data["items"] = dataCompletion
-	response := CompileJSONResult(true, "", data)
-	return c.RenderJSON(response)
+
+	return dataCompletion, "", nil
 }

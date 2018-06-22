@@ -1,12 +1,12 @@
 package controllers
 
 import (
+	"crypto/rand"
 	"github.com/revel/revel"
 	logger "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
-	"time"
 	"io"
-	"crypto/rand"
+	"time"
 )
 
 // Defines global variables
@@ -19,6 +19,7 @@ var (
 	MockSSHPass          = "test"
 	PinCode              string
 	TimeToWaitInvalidPin time.Duration
+	ApiConnections       = make(map[string]ApiConnectionStruct)
 )
 
 func GeneratePinCode() {
@@ -58,7 +59,24 @@ func checkPinCode(c *revel.Controller) revel.Result {
 	return nil
 }
 
+func checkApiPinCode(c *revel.Controller) revel.Result {
+	testParam := c.Params.Get("for_testing")
+	r := c.Request
+
+	if c.ClientIP == "127.0.0.1" && testParam != "true" {
+		return nil
+	}
+
+	userPinCode := r.Header.Get("Pin-Code")
+	if PinCode != userPinCode {
+		return c.Forbidden("You are not permitted to make this request")
+	}
+
+	return nil
+}
+
 func init() {
 	revel.OnAppStart(GeneratePinCode)
 	revel.InterceptFunc(checkPinCode, revel.BEFORE, &App{})
+	revel.InterceptFunc(checkApiPinCode, revel.BEFORE, &ApiV1{})
 }

@@ -8,6 +8,12 @@ GET     /                                       App.Index
 PUT     /setPinCode                             App.SetPinCode
 POST    /:action                                App.:action
 
+GET     /api/v1/:action/:id                     ApiV1.:action
+GET     /api/v1/:action                         ApiV1.:action
+#POST    /api/v1/:action/:id                     ApiV1.:action
+PUT     /api/v1/connect                         ApiV1.Connect
+DELETE  /api/v1/disconnect/:id                  ApiV1.Disconnect
+
 # Map static resources from the /app/public folder to the /public path
 GET     /public/*filepath                                    Static.Serve("public")
 GET     /favicon.ico                                         Static.Serve("public","img/favicon.ico")
