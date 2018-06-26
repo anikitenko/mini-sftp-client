@@ -33,7 +33,18 @@ func (c App) ConnectViaSSH() revel.Result {
 		resultMessage = append(resultMessage, "Unable to determine remote path")
 	}
 
+	data["local_path"] = LocalHomeDirectory()
+
+	data["errors"] = resultMessage
+	data["pin_code"] = PinCode
+
+	response := CompileJSONResult(true, "", data)
+	return c.RenderJSON(response)
+}
+
+func LocalHomeDirectory() string {
 	var homeDirectory string
+
 	if username, err := user.Current(); err != nil {
 		if currentAbsPath, err := filepath.Abs("./"); err == nil {
 			homeDirectory = currentAbsPath
@@ -46,11 +57,5 @@ func (c App) ConnectViaSSH() revel.Result {
 		homeDirectory = username.HomeDir
 	}
 
-	data["local_path"] = homeDirectory
-
-	data["errors"] = resultMessage
-	data["pin_code"] = PinCode
-
-	response := CompileJSONResult(true, "", data)
-	return c.RenderJSON(response)
+	return homeDirectory
 }

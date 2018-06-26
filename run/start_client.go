@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"path/filepath"
 )
 
 func StartClient() {
@@ -35,7 +36,13 @@ func StartClient() {
 	if err := os.Setenv("GOPATH", "."); err != nil {
 		logger.Fatalf("Failed to temporary set environment variable: %v", err)
 	}
-	client := exec.Command("./mini-sftp-client-"+goOS+extension, "-importPath", "github.com/anikitenko/mini-sftp-client", "-runMode", *RunMode, "-port", *PortToListen)
+
+	runDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	client := exec.Command(runDir+string(filepath.Separator)+"mini-sftp-client-"+goOS+extension, "-importPath", "github.com/anikitenko/mini-sftp-client", "-runMode", *RunMode, "-port", *PortToListen)
 
 	stdout, err := client.StdoutPipe()
 	if nil != err {

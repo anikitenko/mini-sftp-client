@@ -2,14 +2,15 @@ package controllers
 
 import (
 	logger "github.com/sirupsen/logrus"
+	"golang.org/x/crypto/ssh"
+	"io"
 	"os"
 	"path/filepath"
-	"io"
 )
 
-func downloadFile(localPath, fileName, fileNamePost string) (string, error) {
+func DownloadFile(localPath, fileName, fileNamePost string, session *ssh.Session) (string, error) {
 	var errorMessage string
-	stdoutNewPipe, err := SSHsession.StdoutPipe()
+	stdoutNewPipe, err := session.StdoutPipe()
 	if err != nil {
 		errorMessage = "Cannot create a pipe to download file"
 		return errorMessage, err
@@ -21,7 +22,7 @@ func downloadFile(localPath, fileName, fileNamePost string) (string, error) {
 		return errorMessage, err
 	}
 
-	if err := SSHsession.Start("cat '" + fileNamePost + "'"); err != nil {
+	if err := session.Start("cat '" + fileNamePost + "'"); err != nil {
 		errorMessage = "Problem with running command via SSH"
 		return errorMessage, err
 	}
@@ -34,7 +35,7 @@ func downloadFile(localPath, fileName, fileNamePost string) (string, error) {
 
 	logger.Infof("Transferred %s", FormatBytes(float64(numberTransferred)))
 
-	SSHsession.Close()
+	session.Close()
 	newLocalFile.Close()
 
 	return "", nil

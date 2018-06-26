@@ -3,15 +3,24 @@ package controllers
 import (
 	"io/ioutil"
 
+	"archive/tar"
+	"compress/gzip"
 	logger "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
-	"math"
-	"strconv"
 	"io"
-	"archive/tar"
+	"math"
+	"math/rand"
 	"os"
 	"path/filepath"
-	"compress/gzip"
+	"strconv"
+	"time"
+)
+
+const (
+	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+	letterIdxBits = 6
+	letterIdxMask = 1<<letterIdxBits - 1
+	letterIdxMax  = 63 / letterIdxBits
 )
 
 // CompileJSONResult returns map[string]interface{} from input.
@@ -31,7 +40,7 @@ func CompileJSONResult(result bool, message string, otherData ...map[string]inte
 }
 
 // PublicKeyFile returns ssh.AuthMethod which is needed to
-// create additional AuthMethod from privte key file
+// create additional AuthMethod from private key file
 func PublicKeyFile(file string) ssh.AuthMethod {
 	buffer, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -155,4 +164,22 @@ func UnTarArchive(name, path string) (string, error) {
 		}
 	}
 	return "", nil
+}
+
+func RandStringBytes(n int) string {
+	var src = rand.NewSource(time.Now().UnixNano())
+	b := make([]byte, n)
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			b[i] = letterBytes[idx]
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+
+	return string(b)
 }

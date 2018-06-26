@@ -31,13 +31,13 @@ func (c App) Download() revel.Result {
 	}
 
 	if dirOrNot {
-		if errString, err := downloadDirectory(sourcePath, localPath, fileName); err != nil {
+		if errString, err := DownloadDirectory(sourcePath, localPath, fileName, SSHsession); err != nil {
 			logger.Warnf("%s: %v", errString, err)
 			response := CompileJSONResult(false, errString)
 			return c.RenderJSON(response)
 		}
 	} else {
-		if errString, err := downloadFile(localPath, fileName, fileNamePost); err != nil {
+		if errString, err := DownloadFile(localPath, fileName, fileNamePost, SSHsession); err != nil {
 			logger.Warnf("%s: %v", errString, err)
 			response := CompileJSONResult(false, errString)
 			return c.RenderJSON(response)

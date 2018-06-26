@@ -1,3 +1,10 @@
+## [v1.0.0](#v100)
+Features:
+* Added API support (see [reference](https://github.com/anikitenko/mini-sftp-client/blob/master/API_REFERENCE.md))
+
+Fixes:
+* Various bug fixes
+
 ## [v1.0.0-RC4](#v100-rc4)
 Features:
 * Added docker support
