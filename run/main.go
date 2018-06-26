@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/blang/semver"
 	"github.com/cheggaaa/pb"
@@ -9,13 +10,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"flag"
 )
 
 var (
-	releaseUrl = "https://api.github.com/repos/anikitenko/mini-sftp-client/releases/latest"
-	PortToListen = flag.String("p", "", "Port to listen on")
-	RunMode = flag.String("m", "prod", "Run mode: dev OR prod")
+	releaseUrl     = "https://api.github.com/repos/anikitenko/mini-sftp-client/releases/latest"
+	PortToListen   = flag.String("p", "", "Port to listen on")
+	RunMode        = flag.String("m", "prod", "Run mode: dev OR prod")
 	NoVersionCheck = flag.Bool("no-ver-check", false, "Skip version check?")
 )
 

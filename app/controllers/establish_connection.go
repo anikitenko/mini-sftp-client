@@ -5,7 +5,9 @@ import (
 	"strconv"
 	"strings"
 
+	"errors"
 	"github.com/revel/revel"
+	logger "github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -17,52 +19,87 @@ func (c App) EstablishSSHConnection() revel.Result {
 	sshPassword := c.Params.Get("ssh_password")
 	sshPort := strings.TrimSpace(c.Params.Get("ssh_port"))
 
-	var err error
-
-	if sshIPHostname == "" {
-		response := CompileJSONResult(false, "SSH IP is empty")
+	if errString, err := ConnectSSH(sshIPHostname, sshUser, sshPassword, sshPort); err != nil {
+		logger.Warnf("%s: %v", errString, err)
+		response := CompileJSONResult(false, errString)
 		return c.RenderJSON(response)
-	} else if sshIPHostname == MockSSHHostString {
+	}
+
+	return nil
+}
+
+func ConnectSSH(host, username, pass, port string) (string, error) {
+	var errorMessage string
+
+	if host == "" {
+		errorMessage = "SSH IP is empty"
+		return errorMessage, errors.New("ssh ip empty")
+	} else if host == MockSSHHostString {
 		if !MockSSHServer {
 			go createMockSSHServer()
 			time.Sleep(time.Second)
 			MockSSHServer = true
 		}
-		sshIPHostname = "127.0.0.1"
+		host = "127.0.0.1"
 	}
 
-	if sshUser == "" {
-		username, err := user.Current()
+	if username == "" {
+		localUsername, err := user.Current()
 		if err != nil {
-			response := CompileJSONResult(false, "You didn't specify SSH user and we were not able to determine it from your system")
-			return c.RenderJSON(response)
+			errorMessage = "You didn't specify SSH user and we were not able to determine it from your system"
+			return errorMessage, err
 		}
-		sshUser = username.Username
+		username = localUsername.Username
 	}
 
-	if sshPort == "" {
-		sshPort = "22"
+	if port == "" {
+		port = "22"
 	} else {
-		if _, err := strconv.Atoi(sshPort); err != nil {
-			response := CompileJSONResult(false, "You specified wrong SSH port")
-			return c.RenderJSON(response)
+		if _, err := strconv.Atoi(port); err != nil {
+			errorMessage = "You specified wrong SSH port"
+			return errorMessage, err
 		}
 	}
 
-	SSHclient, SSHsession, err = createSSHSession(sshIPHostname, sshUser, sshPassword, sshPort)
+	sshSession := createSession(host, username, pass, port)
+
+	SSHclient = sshSession.Client
+	SSHsession = sshSession.Session
+
+	if sshSession.ErrorErr != nil {
+		return sshSession.ErrorStr, sshSession.ErrorErr
+	}
+
+	return "", nil
+}
+
+func createSession(host, username, pass, port string) SSHSessionStruct {
+	var errorMessage string
+	var sshSession SSHSessionStruct
+	client, session, err := createSSHSession(host, username, pass, port)
 
 	if err != nil {
 		switch err.Error() {
 		case "cannot dial":
-			response := CompileJSONResult(false, "We could not reach '"+sshIPHostname+":"+sshPort+"' OR login/password is incorrect")
-			return c.RenderJSON(response)
+			errorMessage = "We could not reach '" + host + ":" + port + "' OR login/password is incorrect"
+			sshSession.ErrorErr = err
+			sshSession.ErrorStr = errorMessage
+			return sshSession
 		case "unable to create session":
-			response := CompileJSONResult(false, "We reached '"+sshIPHostname+":"+sshPort+"' but could not create a test session")
-			return c.RenderJSON(response)
+			errorMessage = "We reached '" + host + ":" + port + "' but could not create a test session"
+			sshSession.ErrorErr = err
+			sshSession.ErrorStr = errorMessage
+			return sshSession
 		default:
-			response := CompileJSONResult(false, err.Error())
-			return c.RenderJSON(response)
+			errorMessage = err.Error()
+			sshSession.ErrorErr = err
+			sshSession.ErrorStr = errorMessage
+			return sshSession
 		}
 	}
-	return nil
+
+	sshSession.Client = client
+	sshSession.Session = session
+
+	return sshSession
 }

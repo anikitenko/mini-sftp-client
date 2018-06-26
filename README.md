@@ -5,7 +5,8 @@
 [![Build Status](https://travis-ci.org/anikitenko/mini-sftp-client.svg?branch=staging)](https://travis-ci.org/anikitenko/mini-sftp-client)
 [![CodeFactor](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client/badge)](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client)
 
-This is a mini web based sFTP client written on Go using Revel Framework
+This is a mini web based sFTP client written on Go 
+using Revel Framework with API support
 
 ## Quick Start
 
@@ -23,7 +24,10 @@ and pickup the latest version for your OS
 - [x] Nothing to install: unzip and run. Use different tabs for different connections
 - [x] Runs on Linux, OS X, Windows
 - [x] Run client for all interfaces and access client from mobile device and manage files
-- [x] Run client on your file server (possible Linux based, Windows, OS X) and access from your desktop or mobile
+- [x] Run client on your file server (possible Linux based, Windows, OS X) and manage files from your desktop
+- [x] Access client from your mobile and manage files on your desktop
+- [x] API support ([reference](https://github.com/anikitenko/mini-sftp-client/blob/staging/API_REFERENCE.md))
+- [x] Docker support ([see below](#want-to-run-as-a-docker-image))
 
 ## Security
 Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
@@ -82,7 +86,7 @@ Run client:
 
 Once you navigate to http://127.0.0.1:9000 you should see the following screen:
 
-![first screen](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/first-screen.png)
+![first screen](https://github.com/anikitenko/mini-sftp-client/raw/staging/doc-images/first-screen.png)
 
 ##### Notes:
 * If you are able to authenticate without password on your server, you may ignore that field
@@ -94,7 +98,7 @@ you will be able to distinguish different connections
 
 ##### Establishing connection:
 
-![connecting](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/connecting.png)
+![connecting](https://github.com/anikitenko/mini-sftp-client/raw/staging/doc-images/connecting.png)
 
 ##### Notes:
 * After you successfully established connection, client will try to detect home directories no matter what is your local OS
@@ -103,17 +107,17 @@ you will be able to distinguish different connections
     for another, input data remains and button to ReConnect also remains,
      so silly click on it will cause all data to load from your another server
     
-![like double tab](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab.gif)
+![like double tab](https://github.com/anikitenko/mini-sftp-client/raw/staging/doc-images/like-double-tab.gif)
 
 
-![like double tab local](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/like-double-tab-local.gif)
+![like double tab local](https://github.com/anikitenko/mini-sftp-client/raw/staging/doc-images/like-double-tab-local.gif)
 
 ##### Notes:
 * "Like double tab" works on Windows, OS X and Linux OS
 
 ##### Downloading files and using search:
 
-![download and search](https://github.com/anikitenko/mini-sftp-client/blob/master/doc-images/download-search.gif)
+![download and search](https://github.com/anikitenko/mini-sftp-client/raw/staging/doc-images/download-search.gif)
 
 ##### Notes:
 * Search works the same for remote files as for local

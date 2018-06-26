@@ -1,12 +1,15 @@
 package controllers
 
 import (
+	"crypto/rand"
 	"github.com/revel/revel"
 	logger "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
-	"time"
 	"io"
-	"crypto/rand"
+	"time"
+	"net/http"
+	"github.com/swaggo/http-swagger"
+	_ "github.com/anikitenko/mini-sftp-client/app/controllers/docs"
 )
 
 // Defines global variables
@@ -19,7 +22,25 @@ var (
 	MockSSHPass          = "test"
 	PinCode              string
 	TimeToWaitInvalidPin time.Duration
+	ApiConnections       = make(map[string]ApiConnectionStruct)
 )
+
+func installHandlers() {
+	revel.AddInitEventHandler(func(event int, _ interface{}) (r int) {
+		if event==revel.ENGINE_STARTED {
+			var (
+				serveMux     = http.NewServeMux()
+				revelHandler = revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler
+			)
+
+			serveMux.Handle("/",     revelHandler)
+			serveMux.Handle("/api/v1/index.html", httpSwagger.WrapHandler)
+			serveMux.Handle("/api/v1/doc.json", httpSwagger.WrapHandler)
+			revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler = serveMux
+		}
+		return
+	})
+}
 
 func GeneratePinCode() {
 	table := []byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
@@ -58,7 +79,25 @@ func checkPinCode(c *revel.Controller) revel.Result {
 	return nil
 }
 
+func checkApiPinCode(c *revel.Controller) revel.Result {
+	testParam := c.Params.Get("for_testing")
+	r := c.Request
+
+	if c.ClientIP == "127.0.0.1" && testParam != "true" {
+		return nil
+	}
+
+	userPinCode := r.Header.Get("Pin-Code")
+	if PinCode != userPinCode {
+		return c.Forbidden("You are not permitted to make this request")
+	}
+
+	return nil
+}
+
 func init() {
+	revel.OnAppStart(installHandlers)
 	revel.OnAppStart(GeneratePinCode)
 	revel.InterceptFunc(checkPinCode, revel.BEFORE, &App{})
+	revel.InterceptFunc(checkApiPinCode, revel.BEFORE, &ApiV1{})
 }

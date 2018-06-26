@@ -20,8 +20,16 @@ before_install: if [[ `npm -v` != 5.7* ]]; then npm i -g npm@5; fi
 install:
   - go get -v github.com/revel/cmd/revel
   - go get -v github.com/kardianos/govendor
+  - go get -v github.com/swaggo/swag/cmd/swag
   - npm ci
   - govendor sync
+  - |
+      if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        sed -i '' "s/\/\/ @version 1.0.0/\/\/ @version $TRAVIS_TAG/" app/controllers/api_v1.go
+      else
+        sed -i "s/\/\/ @version 1.0.0/\/\/ @version $TRAVIS_TAG/g" app/controllers/api_v1.go
+      fi
+  - swag init -g api_v1.go -d app/controllers
 
 before_script:
   - revel run github.com/anikitenko/mini-sftp-client &
@@ -29,7 +37,6 @@ before_script:
 script:
   - "$(npm bin)/cypress run --record"
   - kill $(jobs -p) || true
-  - go build -o ./run/run.tmp ./run
   - |
       if [[ "$TRAVIS_OS_NAME" == "osx" && "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-.+)?$ ]]; then
         echo "Will be releasing!"
