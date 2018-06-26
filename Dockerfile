@@ -9,8 +9,9 @@ RUN git clone https://github.com/anikitenko/mini-sftp-client.git
 
 RUN go get -u github.com/revel/cmd/revel
 RUN go get -u github.com/kardianos/govendor
+RUN go get -v github.com/swaggo/swag/cmd/swag
 
-RUN cd mini-sftp-client && govendor sync
+RUN cd mini-sftp-client && govendor sync && swag init -g api_v1.go -d app/controllers
 
 RUN CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client sftp-client
 
