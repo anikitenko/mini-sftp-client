@@ -72,63 +72,65 @@ func main() {
 		return
 	}
 
-	if !av.LTE(cv) {
-		fmt.Println("New version is available: " + releaseFound.TagName)
-		fmt.Println("Upgrading...")
-		bar := pb.New(releaseFound.Size).SetUnits(pb.U_BYTES)
-		bar.Start()
-
-		resp, err := http.Get(releaseFound.URL)
-		if err != nil {
-			logger.Warnf("Problem with downloading new version: %v", err)
-			StartClient()
-			return
-		}
-
-		newFileName := releaseFound.Name + "-new"
-
-		writer, err := os.Create(newFileName)
-		if err != nil {
-			logger.Warnf("Problem with creating new file: %v", err)
-			StartClient()
-			return
-		}
-
-		multiWriter := io.MultiWriter(writer, bar)
-
-		bytesWritten, err := io.Copy(multiWriter, resp.Body)
-		if err != nil {
-			logger.Warnf("Problem with saving new file: %v", err)
-			StartClient()
-			return
-		}
-
-		if bytesWritten != int64(releaseFound.Size) {
-			logger.Warnf("Problem with saving new file (incorrect bytes count): %v", err)
-			StartClient()
-			return
-		}
-
-		bar.Finish()
-		resp.Body.Close()
-		writer.Close()
-
-		err = os.Remove(releaseFound.Name)
-		if err != nil {
-			logger.Warnf("Problem with removing old file version: %v", err)
-			StartClient()
-			return
-		}
-
-		err = os.Rename(newFileName, releaseFound.Name)
-		if err != nil {
-			logger.Fatalf("Problem with renaming new file: %v", err)
-		}
-
-		err = os.Chmod(releaseFound.Name, 0755)
-		if err != nil {
-			logger.Fatalf("Problem with setting up execute permissions permissions for new file version: %v", err)
-		}
+	if av.LTE(cv) {
+		StartClient()
+		return
 	}
-	StartClient()
+
+	fmt.Println("New version is available: " + releaseFound.TagName)
+	fmt.Println("Upgrading...")
+	bar := pb.New(releaseFound.Size).SetUnits(pb.U_BYTES)
+	bar.Start()
+
+	resp, err := http.Get(releaseFound.URL)
+	if err != nil {
+		logger.Warnf("Problem with downloading new version: %v", err)
+		StartClient()
+		return
+	}
+
+	newFileName := releaseFound.Name + "-new"
+
+	writer, err := os.Create(newFileName)
+	if err != nil {
+		logger.Warnf("Problem with creating new file: %v", err)
+		StartClient()
+		return
+	}
+
+	multiWriter := io.MultiWriter(writer, bar)
+
+	bytesWritten, err := io.Copy(multiWriter, resp.Body)
+	if err != nil {
+		logger.Warnf("Problem with saving new file: %v", err)
+		StartClient()
+		return
+	}
+
+	if bytesWritten != int64(releaseFound.Size) {
+		logger.Warnf("Problem with saving new file (incorrect bytes count): %v", err)
+		StartClient()
+		return
+	}
+
+	bar.Finish()
+	resp.Body.Close()
+	writer.Close()
+
+	err = os.Remove(releaseFound.Name)
+	if err != nil {
+		logger.Warnf("Problem with removing old file version: %v", err)
+		StartClient()
+		return
+	}
+
+	err = os.Rename(newFileName, releaseFound.Name)
+	if err != nil {
+		logger.Fatalf("Problem with renaming new file: %v", err)
+	}
+
+	err = os.Chmod(releaseFound.Name, 0755)
+	if err != nil {
+		logger.Fatalf("Problem with setting up execute permissions permissions for new file version: %v", err)
+	}
 }
