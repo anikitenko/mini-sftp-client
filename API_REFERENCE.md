@@ -14,3 +14,8 @@ API has the following endpoints:
 * GET /getLocalPathCompletion
 * GET /getRemoteHomeDirectory/{id}
 * GET /getRemotePathCompletion/{id}
+
+If you are accessing from remote (not from localhost) then you need to have pin code. Pin code can be passed during each API request via header:
+```
+    curl -H "Pin-Code: 1234"
+```
