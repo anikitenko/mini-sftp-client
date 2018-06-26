@@ -9,7 +9,7 @@ import (
 	"time"
 	"net/http"
 	"github.com/swaggo/http-swagger"
-	_ "mini-sftp-client/app/controllers/docs"
+	_ "github.com/anikitenko/mini-sftp-client/app/controllers/docs"
 )
 
 // Defines global variables
