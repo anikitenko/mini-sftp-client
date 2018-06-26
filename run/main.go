@@ -10,6 +10,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
+	"path/filepath"
 )
 
 var (
@@ -37,7 +39,12 @@ func main() {
 
 	fmt.Println("Checking for updates...")
 
-	appVersion, err := ioutil.ReadFile(".version")
+	runDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	appVersion, err := ioutil.ReadFile(runDir+string(filepath.Separator)+".version")
 	if err != nil {
 		logger.Warnf("Unable to get current version: %v", err)
 		StartClient()
@@ -56,7 +63,8 @@ func main() {
 		return
 	}
 
-	cv, err := semver.Make(string(appVersion))
+	cleanAppVersion := strings.TrimSuffix(string(appVersion), "\n")
+	cv, err := semver.Make(cleanAppVersion)
 	if err != nil {
 		logger.Warnf("Problem with parsing current version: %v", err)
 		StartClient()
@@ -91,7 +99,7 @@ func main() {
 
 	newFileName := releaseFound.Name + "-new"
 
-	writer, err := os.Create(newFileName)
+	writer, err := os.Create(runDir+string(filepath.Separator)+newFileName)
 	if err != nil {
 		logger.Warnf("Problem with creating new file: %v", err)
 		StartClient()
@@ -117,20 +125,23 @@ func main() {
 	resp.Body.Close()
 	writer.Close()
 
-	err = os.Remove(releaseFound.Name)
-	if err != nil {
+	if err = os.Remove(runDir+string(filepath.Separator)+releaseFound.Name); err != nil {
 		logger.Warnf("Problem with removing old file version: %v", err)
 		StartClient()
 		return
 	}
 
-	err = os.Rename(newFileName, releaseFound.Name)
-	if err != nil {
+	if err = os.Rename(runDir+string(filepath.Separator)+newFileName, runDir+string(filepath.Separator)+releaseFound.Name); err != nil {
 		logger.Fatalf("Problem with renaming new file: %v", err)
 	}
 
-	err = os.Chmod(releaseFound.Name, 0755)
-	if err != nil {
+	if err = os.Chmod(runDir+string(filepath.Separator)+releaseFound.Name, 0755); err != nil {
 		logger.Fatalf("Problem with setting up execute permissions permissions for new file version: %v", err)
 	}
+
+	if err = ioutil.WriteFile(runDir+string(filepath.Separator)+".version", []byte(latestVersion), 0644); err != nil {
+		logger.Warnf("Problem with updating new version")
+	}
+
+	StartClient()
 }
