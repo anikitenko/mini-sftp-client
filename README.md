@@ -70,6 +70,9 @@ Install Revel:
 
 Get mini sftp client:
 
+    cd <YOUR_WORK_DIR> (directory should be in GOPATH)
+    mkdir -p src/github.com/anikitenko
+    cd src/github.com/anikitenko
     git clone git@github.com:anikitenko/mini-sftp-client.git
     
 Resolve dependencies:
@@ -79,8 +82,7 @@ Resolve dependencies:
     
 Run client:
 
-    cd ..
-    revel run mini-sftp-client
+    revel run github.com/anikitenko/mini-sftp-client
     
 ## Usage
 
