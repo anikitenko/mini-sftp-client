@@ -1,3 +1,7 @@
+## [v1.0.1](#v101)
+Fixes:
+* Fix auto update
+
 ## [v1.0.0](#v100)
 Features:
 * Added API support (see [reference](https://github.com/anikitenko/mini-sftp-client/blob/master/API_REFERENCE.md))
