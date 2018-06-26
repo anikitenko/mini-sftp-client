@@ -91,7 +91,7 @@ Once you navigate to http://127.0.0.1:9000 you should see the following screen:
 ![first screen](https://github.com/anikitenko/mini-sftp-client/raw/staging/doc-images/first-screen.png)
 
 ##### Notes:
-* If you are able to authenticate without password on your server, you may ignore that field
+* If you are able to authenticate without password on your server, you may ignore password field
 * During establishing SSH connection client will try to use .ssh/id_rsa and .ssh/id_dsa if client finds them
 * Unsure about connection? Use Test button
 * Changing connection name also changes title of the page. 
@@ -103,7 +103,7 @@ you will be able to distinguish different connections
 ![connecting](https://github.com/anikitenko/mini-sftp-client/raw/staging/doc-images/connecting.png)
 
 ##### Notes:
-* After you successfully established connection, client will try to detect home directories no matter what is your local OS
+* After you successfully established connection, client will try to detect remote and local home directories
 * Button to Test connection is disabled after successful connection
     * This is because you can enter credentials to 1 server and if you test 
     for another, input data remains and button to ReConnect also remains,
