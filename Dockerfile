@@ -22,7 +22,7 @@ RUN find sftp-client/src/github.com/anikitenko/mini-sftp-client \
  -maxdepth 1 ! -path sftp-client/src/github.com/anikitenko/mini-sftp-client \
  -not -name app -not -name conf -not -name public -exec rm -rf {} +
 
-RUN cd mini-sftp-client/run && CGO_ENABLED=0 GOOS=linux go build -o ../../sftp-client/start-client
+RUN cd mini-sftp-client/run && govendor sync && CGO_ENABLED=0 GOOS=linux go build -o ../../sftp-client/start-client
 
 # Running - Step 2
 FROM alpine:3.7
