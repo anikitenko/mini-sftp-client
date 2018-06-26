@@ -27,6 +27,8 @@ func getReleaseInfo() (*releaseInfo, error) {
 		return nil, err
 	}
 
+	tagName = strings.TrimPrefix(tagName, "v")
+
 	info := &releaseInfo{TagName: tagName}
 
 	assets := jsonRead.Get("assets").MustArray()
