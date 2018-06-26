@@ -7,11 +7,14 @@ CGO_ENABLED=0 revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-os
 CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-linux
 CGO_ENABLED=0 GOOS=windows revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-windows
 
-CGO_ENABLED=0 go build -o ../run-osx github.com/anikitenko/mini-sftp-client/run && chmod +x ../run-osx
-CGO_ENABLED=0 GOOS=linux go build -o ../run-linux github.com/anikitenko/mini-sftp-client/run && chmod +x ../run-linux
-CGO_ENABLED=0 GOOS=windows go build -o ../run.exe github.com/anikitenko/mini-sftp-client/run
+cd run
+govendor sync
 
-cd ..
+CGO_ENABLED=0 go build -o ../run-osx && chmod +x ../run-osx
+CGO_ENABLED=0 GOOS=linux go build -o ../run-linux && chmod +x ../run-linux
+CGO_ENABLED=0 GOOS=windows go build -o ../run.exe
+
+cd ../..
 mkdir artifacts
 
 rm -f mini-sftp-osx/run.sh mini-sftp-osx/run.bat
