@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+type App struct {
+	*revel.Controller
+}
+
 // Index returns just index page
 func (c App) Index() revel.Result {
 	testParam := c.Params.Get("for_testing")

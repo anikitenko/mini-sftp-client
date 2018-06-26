@@ -6,17 +6,15 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
-// @Title Connect via SSH
-// @Description Establish and store connection
-// @Accept json
-// @Param ip body string true "IP/HostName";
-// @Param user body string true "Username";
-// @Param password body string true "Password";
-// @Param port body string true "Port";
-// @Success 200 {object} string "Success"
-// @Failure 403 {object} string "Access denied"
-// @Resource /connect
-// @Router /v1/connect [put]
+// @Summary Connect via SSH
+// @Description connect via SSH and store connection
+// @ID connect
+// @Accept  json
+// @Produce  json
+// @Param   JSON      	body   	controllers.ApiConnectionStruct     	true  	"Connection information"
+// @Success 200 {object} controllers.GeneralResponse	"Success with connection ID in message"
+// @Failure 403 {string} string "Not authorized!"
+// @Router /connect [put]
 func (c ApiV1) Connect() revel.Result {
 	jsonReceive := c.Params.JSON
 	connectionDetails := ApiConnectionStruct{}

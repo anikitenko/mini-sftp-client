@@ -4,16 +4,25 @@
 #
 
 
-GET     /                                       App.Index
-PUT     /setPinCode                             App.SetPinCode
-POST    /:action                                App.:action
+GET     /                                                    App.Index
+PUT     /setPinCode                                          App.SetPinCode
+POST    /:action                                             App.:action
 
-GET     /api/v1/:action/:id                     ApiV1.:action
-GET     /api/v1/:action                         ApiV1.:action
-#POST    /api/v1/:action/:id                     ApiV1.:action
-PUT     /api/v1/connect                         ApiV1.Connect
-DELETE  /api/v1/disconnect/:id                  ApiV1.Disconnect
+GET     /api/v1/swagger-ui-standalone-preset.js              Static.Serve("public","swagger/swagger-ui-standalone-preset.js")
+GET     /api/v1/swagger-ui-standalone-preset.js.map          Static.Serve("public","swagger/swagger-ui-standalone-preset.js.map")
+GET     /api/v1/swagger-ui-bundle.js                         Static.Serve("public","swagger/swagger-ui-bundle.js")
+GET     /api/v1/swagger-ui-bundle.js.map                     Static.Serve("public","swagger/swagger-ui-bundle.js.map")
+GET     /api/v1/swagger-ui.js                                Static.Serve("public","swagger/swagger-ui.js")
+GET     /api/v1/swagger-ui.js.map                            Static.Serve("public","swagger/swagger-ui.js.map")
+GET     /api/v1/swagger-ui.css                               Static.Serve("public","swagger/swagger-ui.css")
+GET     /api/v1/swagger-ui.css.map                           Static.Serve("public","swagger/swagger-ui.css.map")
 
-# Map static resources from the /app/public folder to the /public path
+GET      /api/v1                                             ApiV1.Help
+GET      /api/v1/:action/:id                                 ApiV1.:action
+GET      /api/v1/:action                                     ApiV1.:action
+POST     /api/v1/:action/:id                                 ApiV1.:action
+PUT      /api/v1/connect                                     ApiV1.Connect
+DELETE   /api/v1/disconnect/:id                              ApiV1.Disconnect
+
 GET     /public/*filepath                                    Static.Serve("public")
 GET     /favicon.ico                                         Static.Serve("public","img/favicon.ico")

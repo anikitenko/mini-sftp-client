@@ -6,6 +6,13 @@ import (
 	"path/filepath"
 )
 
+// @Summary Get connections
+// @Description get list of stored connections
+// @ID get-connections
+// @Produce  json
+// @Success 200 {object} controllers.GetConnectionsStruct	"Success"
+// @Failure 403 {string} string "Not authorized!"
+// @Router /getConnections [get]
 func (c ApiV1) GetConnections(id string) revel.Result {
 	data := make(map[string]interface{})
 
@@ -28,6 +35,14 @@ func (c ApiV1) GetConnections(id string) revel.Result {
 	return c.RenderJSON(response)
 }
 
+// @Summary Get remote home directory
+// @Description get remote home directory path
+// @ID get-remote-home-directory-path
+// @Produce  json
+// @Param   id      	path   	string     	true  	"Connection ID"
+// @Success 200 {object} controllers.GeneralResponse	"Success with home directory path in message"
+// @Failure 403 {string} string "Not authorized!"
+// @Router /getRemoteHomeDirectory/{id} [get]
 func (c ApiV1) GetRemoteHomeDirectory(id string) revel.Result {
 	var sshSessionConnect SSHSessionStruct
 	var homePath string
@@ -63,6 +78,15 @@ func (c ApiV1) GetRemoteHomeDirectory(id string) revel.Result {
 	return c.RenderJSON(response)
 }
 
+// @Summary Get remote path completion
+// @Description list remote directories like "double tab"
+// @ID get-remote-path-completion
+// @Produce  json
+// @Param   id      	path   	string     	true  	"Connection ID"
+// @Param   path      	query   	string     	true  	"Remote path"
+// @Success 200 {object} controllers.GetPathCompletionStruct	"Success with list of items"
+// @Failure 403 {string} string "Not authorized!"
+// @Router /getRemotePathCompletion/{id} [get]
 func (c ApiV1) GetRemotePathCompletion(id string) revel.Result {
 	var sshSessionConnect SSHSessionStruct
 	var completionItems []string
@@ -109,11 +133,25 @@ func (c ApiV1) GetRemotePathCompletion(id string) revel.Result {
 	return c.RenderJSON(response)
 }
 
+// @Summary Get local home directory
+// @ID get-local-home-directory
+// @Produce  json
+// @Success 200 {object} controllers.GeneralResponse	"Success with local path in message"
+// @Failure 403 {string} string "Not authorized!"
+// @Router /getLocalHomeDirectory [get]
 func (c ApiV1) GetLocalHomeDirectory(id string) revel.Result {
 	response := CompileJSONResult(true, LocalHomeDirectory())
 	return c.RenderJSON(response)
 }
 
+// @Summary Get local path completion
+// @Description list local directories like "double tab"
+// @ID get-local-path-completion
+// @Produce  json
+// @Param   path      	query   	string     	true  	"Local path"
+// @Success 200 {object} controllers.GetPathCompletionStruct	"Success with list of items"
+// @Failure 403 {string} string "Not authorized!"
+// @Router /getLocalPathCompletion [get]
 func (c ApiV1) GetLocalPathCompletion(id string) revel.Result {
 	var completionItems []string
 	path := c.Params.Query.Get("path")
@@ -140,6 +178,16 @@ func (c ApiV1) GetLocalPathCompletion(id string) revel.Result {
 	return c.RenderJSON(response)
 }
 
+// @Summary Download
+// @Description download file or directory
+// @ID download
+// @Produce  json
+// @Param   id      	path   	string     	true  	"Connection ID"
+// @Param   path      	query   string     	true  	"Path to file OR directory"
+// @Param	save_to		query	string		false	"If not empty than download to.. otherwise file/directory will be downloaded to local home directory"
+// @Success 200 {object} controllers.GeneralResponse	"Success"
+// @Failure 403 {string} string "Not authorized!"
+// @Router /download/{id} [get]
 func (c ApiV1) Download(id string) revel.Result {
 	var sshSessionConnect SSHSessionStruct
 	fileToDownload := c.Params.Query.Get("path")

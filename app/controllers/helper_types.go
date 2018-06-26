@@ -1,20 +1,11 @@
 package controllers
 
 import (
-	"github.com/revel/revel"
 	"golang.org/x/crypto/ssh"
 	"io"
 )
 
 type (
-	App struct {
-		*revel.Controller
-	}
-
-	ApiV1 struct {
-		*revel.Controller
-	}
-
 	SSHSessionStruct struct {
 		Client   *ssh.Client
 		Session  *ssh.Session
@@ -34,9 +25,26 @@ type (
 	}
 
 	ApiConnectionStruct struct {
-		Ip       string
-		User     string
-		Password string
-		Port     string
+		Ip       string `json:"ip" example:"127.0.0.1" required:"true"`
+		User     string `json:"user" example:"root"`
+		Password string `json:"password"`
+		Port     string `json:"port" example:"22"`
+	}
+
+	GeneralResponse struct {
+		Result  bool   `json:"result"`
+		Message string `json:"message"`
+	}
+
+	GetConnectionsStruct struct {
+		Result  bool   `json:"result"`
+		Message string `json:"message"`
+		Connections []ApiConnectionStruct `json:"connections"`
+	}
+
+	GetPathCompletionStruct struct {
+		Result  bool   `json:"result"`
+		Message string `json:"message"`
+		Items []string `json:"items"`
 	}
 )
