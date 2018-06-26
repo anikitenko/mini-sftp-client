@@ -33,13 +33,13 @@ func StartClient() {
 		logger.Fatalf("Port should be a number: %v", err)
 	}
 
-	if err := os.Setenv("GOPATH", "."); err != nil {
-		logger.Fatalf("Failed to temporary set environment variable: %v", err)
-	}
-
 	runDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		logger.Fatal(err)
+	}
+
+	if err := os.Setenv("GOPATH", runDir); err != nil {
+		logger.Fatalf("Failed to temporary set environment variable: %v", err)
 	}
 
 	client := exec.Command(runDir+string(filepath.Separator)+"mini-sftp-client-"+goOS+extension, "-importPath", "github.com/anikitenko/mini-sftp-client", "-runMode", *RunMode, "-port", *PortToListen)
