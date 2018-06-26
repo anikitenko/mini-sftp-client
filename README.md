@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/anikitenko/mini-sftp-client.svg?branch=staging)](https://travis-ci.org/anikitenko/mini-sftp-client)
 [![CodeFactor](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client/badge)](https://www.codefactor.io/repository/github/anikitenko/mini-sftp-client)
 [![Docker Automated build](https://img.shields.io/docker/automated/anikitenko/mini-sftp-client.svg)](https://hub.docker.com/r/anikitenko/mini-sftp-client/)
+[![MicroBadger Size](https://img.shields.io/microbadger/image-size/anikitenko/mini-sftp-client.svg)](https://hub.docker.com/r/anikitenko/mini-sftp-client/)
+[![Docker Build Status](https://img.shields.io/docker/build/anikitenko/mini-sftp-client.svg)](https://hub.docker.com/r/anikitenko/mini-sftp-client/)
 
 This is a mini web based sFTP client written on Go 
 using Revel Framework with API support
