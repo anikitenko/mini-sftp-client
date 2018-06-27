@@ -62,17 +62,138 @@ $(function () {
         }
     });
 
+    $(".saveCredentialsInCookies").on("click", function (e) {
+        let _this = this;
+        if ($(this).is(":checked")) {
+            e.preventDefault();
+            bootbox.confirm({
+                message: "Please note that your passwords will be stored unencrypted in cookies!<br>"+
+                "This is a serious security issue!<br>But.. it will be easier for you to connect.."+
+                "<br>A quick note:<br>"+
+                "Passwords which are we also keep are ONLY in memory. After you stop client they will disappear (you may check yourself) :)<br>"+
+                "So... if this is a 'one-time' connection OR if you are connecting to serious machine better skip this option<br>"+
+                "Again.. until you stop your client your passwords will be also saved.. but in more secure way :)",
+                buttons: {
+                    confirm: {
+                        label: 'I totally agree',
+                        className: 'btn-danger'
+                    },
+                    cancel: {
+                        label: 'Keep my passwords safe',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (result) {
+                    if (!result) {
+                        $(_this).prop("checked", false);
+                        return
+                    }
+                    $(_this).prop("checked", true);
+                }
+            });
+        }
+    });
+
+    $(".showStoredConnections").on("click", function (e) {
+        let _this = this,
+            l = Ladda.create(_this);
+        e.stopPropagation();
+        e.preventDefault();
+        l.start();
+        $.post("/getStoredConnections", function (response) {
+            if (response["result"]) {
+                let connections = response["connections"],
+                    localConnections = Cookies.getJSON('stored_connections');
+                const dropDownMenu = $(".dropdown-menu");
+                dropDownMenu.empty();
+                if (localConnections === undefined) {
+                    if ($.isEmptyObject(connections)) {
+                        let htmlBlock = "<li><a href='javascript:void(0)'>No stored connections</li>";
+                        dropDownMenu.html(htmlBlock);
+                    }
+                    $.each(connections, function (ip, val) {
+                        $.each(val, function (i, ports) {
+                            $.each(ports, function (port, users) {
+                                $.each(users, function () {
+                                    let htmlBlock = "<li data-username='"+this.User+
+                                        "' data-password='"+this.Password+
+                                        "' data-port='"+port+
+                                        "' data-host='"+ip+"'><a class='storedConnection' href='javascript:void(0)'>"+this.User+"@"+ip+":"+port+"</a></li>";
+                                    dropDownMenu.append(htmlBlock);
+                                });
+                            })
+                        });
+                    })
+                } else {
+                    $.each(connections, function (ip, val) {
+                        $.each(val, function (i, ports) {
+                            $.each(ports, function (port, users) {
+                                $.each(users, function (i, user) {
+                                    let credentialsFound = false,
+                                        connectionInformation = {};
+                                    $.each(localConnections, function (i, val) {
+                                        if (val.Host === ip && val.User === user.User && val.Port === port) {
+                                            credentialsFound = true;
+                                            return false
+                                        }
+                                    });
+                                    if (!credentialsFound) {
+                                        connectionInformation.Host = ip;
+                                        connectionInformation.User = user.User;
+                                        connectionInformation.Password = user.Password;
+                                        connectionInformation.Port = port;
+                                        localConnections.push(connectionInformation);
+                                    }
+                                });
+                            });
+                        });
+                    });
+                    $.each(localConnections, function (i, val) {
+                        let htmlBlock = "<li data-username='"+val.User+
+                            "' data-password='"+val.Password+
+                            "' data-port='"+val.Port+
+                            "' data-host='"+val.Host+"'><a class='storedConnection' href='javascript:void(0)'>"+val.User+"@"+val.Host+":"+val.Port+"</a></li>";
+                        dropDownMenu.append(htmlBlock);
+                    });
+                }
+            } else {
+                sendNotify(response["message"], "danger");
+                let htmlBlock = "<li><a href='javascript:void(0)'>Error</li>";
+                $(".dropdown-menu").html(htmlBlock);
+            }
+        }, 'json').always(function () {
+            l.stop();
+            $(_this).dropdown("toggle");
+        });
+    });
+
+    $(document).on("click", ".storedConnection", function () {
+        let sshIp = $(this).parent().attr("data-host"),
+            sshUser = $(this).parent().attr("data-username"),
+            sshPass = $(this).parent().attr("data-password"),
+            sshPort = $(this).parent().attr("data-port");
+        $("#sshIp").val(sshIp);
+        $("#sshUser").val(sshUser);
+        $("#sshPassword").val(sshPass);
+        $("#sshPort").val(sshPort);
+    });
+
     $(".mainForm").on("submit", function (e) {
         e.preventDefault();
         $("#sshConnect").trigger("click");
+    }).keypress(function(e) {
+        if(e.which === 13) {
+            e.preventDefault();
+            $("#sshConnect").trigger("click");
+        }
     });
 
     $("#sshConnect").on("click", function (e) {
         e.preventDefault();
-        let sshIP = $("#sshIp").val(),
-            sshUser = $("#sshUser").val(),
-            sshPassword = $("#sshPassword").val(),
-            sshPort = $("#sshPort").val(),
+        let sshIP = $.trim($("#sshIp").val()),
+            sshUser = $.trim($("#sshUser").val()),
+            sshPassword = $.trim($("#sshPassword").val()),
+            sshPort = $.trim($("#sshPort").val()),
             l = Ladda.create(this),
             _this = this;
         l.start();
@@ -89,7 +210,30 @@ $(function () {
             if (response["result"]) {
                 let localPath = response["local_path"],
                     remotePath = response["remote_path"],
-                    pinCode = response["pin_code"];
+                    pinCode = response["pin_code"],
+                    connectionInformation = {},
+                    localConnections = Cookies.getJSON('stored_connections'),
+                    localConnectionExists = false;
+                connectionInformation.Host = sshIP;
+                connectionInformation.User = sshUser;
+                connectionInformation.Password = sshPassword;
+                connectionInformation.Port = sshPort;
+                if (localConnections === undefined) {
+                    localConnections = [];
+                } else {
+                    $.each(localConnections, function (i, val) {
+                        if (val.Host === sshIP && val.User === sshUser && val.Port === sshPort) {
+                            localConnectionExists = true;
+                            return false
+                        }
+                    });
+                }
+
+                if (!localConnectionExists && $(".saveCredentialsInCookies").is(":checked")) {
+                    localConnections.push(connectionInformation);
+                    Cookies.set("stored_connections", localConnections, {expires: 7});
+                }
+
                 remoteHome = response["remote_path"];
                 localHome = response["local_path"];
                 if (response["errors"] !== null) {
@@ -134,10 +278,10 @@ $(function () {
     });
 
     $("#testSSHConnection").on("click", function () {
-        let sshIP = $("#sshIp").val(),
-            sshUser = $("#sshUser").val(),
-            sshPassword = $("#sshPassword").val(),
-            sshPort = $("#sshPort").val(),
+        let sshIP = $.trim($("#sshIp").val()),
+            sshUser = $.trim($("#sshUser").val()),
+            sshPassword = $.trim($("#sshPassword").val()),
+            sshPort = $.trim($("#sshPort").val()),
             l = Ladda.create(this);
         l.start();
         if (sshPort === "") {
@@ -151,7 +295,30 @@ $(function () {
             ssh_port: sshPort
         }, function (response) {
             if (response["result"]) {
-                let pinCode = response["pin_code"];
+                let pinCode = response["pin_code"],
+                    connectionInformation = {},
+                    localConnections = Cookies.getJSON('stored_connections'),
+                    localConnectionExists = false;
+                connectionInformation.Host = sshIP;
+                connectionInformation.User = sshUser;
+                connectionInformation.Password = sshPassword;
+                connectionInformation.Port = sshPort;
+                if (localConnections === undefined) {
+                    localConnections = [];
+                } else {
+                    $.each(localConnections, function (i, val) {
+                        if (val.Host === sshIP && val.User === sshUser && val.Port === sshPort) {
+                            localConnectionExists = true;
+                            return false
+                        }
+                    });
+                }
+
+                if (!localConnectionExists && $(".saveCredentialsInCookies").is(":checked")) {
+                    localConnections.push(connectionInformation);
+                    Cookies.set("stored_connections", localConnections, {expires: 7});
+                }
+
                 $("#pinCode").text(pinCode);
                 sendNotify("SSH connection was established successfully to '" + sshIP + ":" + sshPort + "'", "success");
             } else {
