@@ -42,10 +42,25 @@
             <a href="#" id="connectionNameDisplay"
                style="font-weight: bold;margin-bottom: 0;margin-top: 0;font-size: 18pt;">&nbsp;</a>
         </div>
-        <form class="form-inline mainForm" style="margin-bottom: 50px">
+        <form class="form-inline mainForm" style="margin-bottom: 5px">
             <div class="form-group">
                 <label for="sshIp">IP</label>
-                <input type="text" class="form-control" id="sshIp" placeholder="ex. 127.0.0.1" autofocus>
+                <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox" aria-label="Save credentials in cookies?" data-toggle="tooltip"
+               data-placement="top" class="saveCredentialsInCookies"
+               tabindex="-1"
+               title="This will save credentials that will be available even after you restart client. Cookies MUST be enabled. Valid for 7 days only.">
+      </span>
+                    <input type="text" class="form-control" id="sshIp" placeholder="ex. 127.0.0.1" autofocus>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle showStoredConnections ladda-button"
+                                data-toggle="dropdown" data-spinner-color="#4bdbf3" tabindex="-1"
+                                aria-haspopup="true" aria-expanded="false" data-style="zoom-out"><span
+                                class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right"></ul>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label for="sshUser">User</label>
@@ -60,13 +75,18 @@
                 <label for="sshPort">Port</label>
                 <input type="text" class="form-control" id="sshPort" placeholder="22" value="22">
             </div>
+        </form>
+        <form class="form-inline" style="margin-left: 15px;margin-bottom: 50px">
             <div class="form-group">
                 <button type="button" role="button" id="testSSHConnection" class="btn btn-primary ladda-button"
                         data-style="zoom-out">Test
                 </button>
             </div>
-            <button id="sshConnect" type="submit" class="btn btn-success ladda-button" data-style="zoom-out">Connect!
-            </button>
+            <div class="form-group">
+                <button type="button" role="button" id="sshConnect" class="btn btn-success ladda-button"
+                        data-style="zoom-out">Connect!
+                </button>
+            </div>
         </form>
     </div>
     <div class="col-md-6 remoteFilesNavigationBlock" style="padding-top: 10px;visibility: hidden;">
