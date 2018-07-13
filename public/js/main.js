@@ -67,12 +67,13 @@ $(function () {
         if ($(this).is(":checked")) {
             e.preventDefault();
             bootbox.confirm({
-                message: "Please note that your passwords will be stored unencrypted in cookies!<br>"+
-                "This is a serious security issue!<br>But.. it will be easier for you to connect.."+
-                "<br>A quick note:<br>"+
-                "Passwords which are we also keep are ONLY in memory. After you stop client they will disappear (you may check yourself) :)<br>"+
-                "So... if this is a 'one-time' connection OR if you are connecting to serious machine better skip this option<br>"+
-                "Again.. until you stop your client your passwords will be also saved.. but in more secure way :)",
+                message: "<div><span>Please note that your passwords will be <ins>stored unencrypted in cookies</ins>!</span></div>"+
+                "<div><span>This is a <ins>serious security issue</ins>!<br>But.. it will be easier for you to connect..</span></div>"+
+                "<span>A quick note:</span><ul>"+
+                "<li>Passwords which we also keep are ONLY in memory. After you stop client they will disappear (you may check yourself) :)</li>"+
+                "<li>So... if this is a 'one-time' connection OR if you are connecting to serious machine better skip this option</li>"+
+                "<li>Again.. until you stop your client your passwords will be also saved.. but in more secure way :)</li></ul>",
+                title: "Security Warning!",
                 buttons: {
                     confirm: {
                         label: 'I totally agree',
@@ -97,6 +98,11 @@ $(function () {
     $(".showStoredConnections").on("click", function (e) {
         let _this = this,
             l = Ladda.create(_this);
+
+        if ($(this).parent().find("ul").is(":visible")) {
+            return
+        }
+
         e.stopPropagation();
         e.preventDefault();
         l.start();
