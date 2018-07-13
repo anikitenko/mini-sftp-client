@@ -6,7 +6,8 @@ Features:
 * Optionally save credentials in cookies (notice about serious security issue appears as well)
 
 Improvements:
-* More complex name is used for downloading update
+* More complex name is used for downloading updates
+* Ability to stop download process
 
 Fixes:
 * Upgrade process now updates static files
