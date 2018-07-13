@@ -57,6 +57,11 @@ $(function () {
                             download(sshIP, sshUser, sshPassword, sshPort, sourcePath, draggablePath, localPath, isDir, false, true, ui, notify)
                         }
                     }
+                },
+                onEscape: function () {
+                    notify.update('progress', '100');
+                    notify.close();
+                    sendNotify("Download was canceled", "success");
                 }
             });
         }
@@ -76,7 +81,11 @@ $(function () {
         }, function (response) {
             if (response["result"]) {
                 if (!localFileExists) {
-                    localFilesBlock.append($(ui.draggable).clone());
+                    let newItem = $(ui.draggable).clone();
+                    localFilesBlock.append(newItem);
+                    if (contextMenuEnabled) {
+                        enableContextMenuLocal(newItem);
+                    }
                 }
                 if (fileToBackup) {
                     $(".localRefresh").trigger("click");

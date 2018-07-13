@@ -20,7 +20,6 @@ func (c App) CreateNewLocalDirectory() revel.Result {
 	newPath := path + string(filepath.Separator) + name
 
 	if name == "" {
-		logger.Warn("Directory name is empty")
 		response := CompileJSONResult(false, "Directory name is empty")
 		return c.RenderJSON(response)
 	}
