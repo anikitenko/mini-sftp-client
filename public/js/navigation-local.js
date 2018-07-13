@@ -1,6 +1,7 @@
 let localPathInputSearch = "",
     localPathHistoryBack = [],
-    localPathSeparator = "/";
+    localPathSeparator = "/",
+    contextMenuEnabled = false;
 
 $(function () {
     $("#localPath").select2({
@@ -79,6 +80,11 @@ $(function () {
         }, 'json').always(function () {
             notify.update('progress', '100');
             notify.close();
+            if (contextMenuEnabled) {
+                $(".localFilesBlock").find("div").off("contextmenu");
+                contextMenuEnabled = false;
+                sendNotify("Context menu was disabled", "success");
+            }
         });
     });
 
@@ -121,5 +127,17 @@ $(function () {
             }
         });
         localPathHistoryBack.splice(0, 2);
+    });
+
+    $(".enableRightClick").on("click", function () {
+        if (!contextMenuEnabled) {
+            enableContextMenuLocal($(".localFilesBlock").find("div"));
+            contextMenuEnabled = true;
+            sendNotify("Context menu was enabled", "warning");
+        } else {
+            $(".localFilesBlock").find("div").off("contextmenu");
+            contextMenuEnabled = false;
+            sendNotify("Context menu was disabled", "success");
+        }
     });
 });

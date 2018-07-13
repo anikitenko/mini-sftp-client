@@ -1,51 +1,15 @@
-let remoteHome = "",
-    localHome = "",
-    connectionName = "New Connection";
-
-window.onbeforeunload = function () {
-    const sshIPValue = $.trim($("#sshIp").val());
-    if (sshIPValue !== "" && sshIPValue !== undefined) {
-        if (sshIPValue !== "sftp-mock-test") {
-            return "Are you sure you wish to leave the page?";
-        }
-    }
-};
-
-$.notifyDefaults({
-    newest_on_top: true
-});
-
-$.notifyClose('top-right');
-
-$('[data-toggle="tooltip"]').tooltip({
-    trigger: 'hover'
-});
-
-function sendNotify(text, type) {
-    let icon = "";
-    if (type === "warning" || type === "danger") {
-        icon = "glyphicon glyphicon-warning-sign"
-    }
-    $.notify({
-            message: text,
-            icon: icon
-        }, {
-            type: type,
-            timer: 50
-        });
-}
-
-$(document).ajaxError(function (event, jqxhr) {
-    if (jqxhr.status === 500 || jqxhr.status === 502) {
-        sendNotify("Something went wrong!", "danger");
-    } else if (jqxhr.status === 404) {
-        sendNotify("Requested resource not found!", "danger");
-    } else if (jqxhr.status === 403) {
-        sendNotify("You don't have permission to resource you are trying to access!", "danger");
-    }
-});
-
 $(function () {
+    let remoteHome = "",
+        localHome = "",
+        connectionName = "New Connection";
+
+    $("#fileContentsModal").on('shown.bs.modal', function () {
+        let preCodeBlock = $(this).find("pre code").get(0);
+        if (preCodeBlock !== undefined) {
+            hljs.highlightBlock($(this).find("pre code").get(0));
+        }
+    });
+
     $('#connectionNameDisplay').editable({
         type: 'text',
         mode: 'inline',
@@ -107,10 +71,10 @@ $(function () {
         e.preventDefault();
         l.start();
         $.post("/getStoredConnections", function (response) {
+            const dropDownMenu = $(_this).parent().find(".dropdown-menu");
             if (response["result"]) {
                 let connections = response["connections"],
                     localConnections = Cookies.getJSON('stored_connections');
-                const dropDownMenu = $(".dropdown-menu");
                 dropDownMenu.empty();
                 if (localConnections === undefined) {
                     if ($.isEmptyObject(connections)) {
@@ -165,7 +129,7 @@ $(function () {
             } else {
                 sendNotify(response["message"], "danger");
                 let htmlBlock = "<li><a href='javascript:void(0)'>Error</li>";
-                $(".dropdown-menu").html(htmlBlock);
+                dropDownMenu.html(htmlBlock);
             }
         }, 'json').always(function () {
             l.stop();
