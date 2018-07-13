@@ -99,22 +99,26 @@ function enableContextMenuLocal(selector) {
                 return
             }
             switch (selectedMenu.attr("data-action")) {
-                case "showFileContent":
+                case "showFileContent": {
                     const fileContentsModal = $("#fileContentsModal");
-                    $.post("/showFileContent", {path: $('#localPath').val(), name: invokedOn.text()}, function (response) {
+                    $.post("/showFileContent", {
+                        path: $('#localPath').val(),
+                        name: invokedOn.text()
+                    }, function (response) {
                         fileContentsModal.find(".modal-title").text(invokedOn.text());
                         if (response["result"]) {
                             let fileContent = escapeHtml(response["contents"]);
-                            let htmlBlock = '<pre class="pre-scrollable" style="max-height:430px"><code>'+
-                                fileContent+"</code></pre>";
+                            let htmlBlock = '<pre class="pre-scrollable" style="max-height:430px"><code>' +
+                                fileContent + "</code></pre>";
                             fileContentsModal.find(".modal-body").html(htmlBlock);
                         } else {
-                            fileContentsModal.find(".modal-body").html('<span class="text-danger">'+response["message"]+'</span>');
+                            fileContentsModal.find(".modal-body").html('<span class="text-danger">' + response["message"] + '</span>');
                         }
                     }).always(function () {
                         fileContentsModal.modal("show");
                     });
                     break;
+                }
                 case "deleteItem":
                     bootbox.confirm(
                         "Are you sure you want to remove <strong>" +
@@ -155,7 +159,7 @@ function escapeHtml(string) {
         '`': '&#x60;',
         '=': '&#x3D;'
     };
-    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+    return String(string).replace(/[&<>"'`=/]/g, function (s) {
         return entityMap[s];
     });
 }
