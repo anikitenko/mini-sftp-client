@@ -3,6 +3,11 @@
 cd "$TRAVIS_BUILD_DIR"
 
 rm -rf node_modules
+mkdir ../artifacts
+
+zip -r update.zip app conf public
+mv update.zip ../artifacts/
+
 CGO_ENABLED=0 revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-osx
 CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-linux
 CGO_ENABLED=0 GOOS=windows revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-windows
@@ -15,7 +20,6 @@ CGO_ENABLED=0 GOOS=linux go build -o ../../run-linux && chmod +x ../../run-linux
 CGO_ENABLED=0 GOOS=windows go build -o ../../run.exe
 
 cd ../..
-mkdir artifacts
 
 rm -f mini-sftp-osx/run.sh mini-sftp-osx/run.bat
 rm -f mini-sftp-linux/run.sh mini-sftp-linux/run.bat
