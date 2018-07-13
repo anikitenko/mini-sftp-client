@@ -6,6 +6,11 @@ import (
 )
 
 type (
+	StoredUserPasswordStruct struct {
+		User     string
+		Password string
+	}
+
 	SSHSessionStruct struct {
 		Client   *ssh.Client
 		Session  *ssh.Session
@@ -37,14 +42,14 @@ type (
 	}
 
 	GetConnectionsStruct struct {
-		Result  bool   `json:"result"`
-		Message string `json:"message"`
+		Result      bool                  `json:"result"`
+		Message     string                `json:"message"`
 		Connections []ApiConnectionStruct `json:"connections"`
 	}
 
 	GetPathCompletionStruct struct {
-		Result  bool   `json:"result"`
-		Message string `json:"message"`
-		Items []string `json:"items"`
+		Result  bool     `json:"result"`
+		Message string   `json:"message"`
+		Items   []string `json:"items"`
 	}
 )

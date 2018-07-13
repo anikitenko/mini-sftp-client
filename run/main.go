@@ -12,6 +12,7 @@ import (
 	"os"
 	"strings"
 	"path/filepath"
+	"time"
 )
 
 var (
@@ -97,7 +98,7 @@ func main() {
 		return
 	}
 
-	newFileName := releaseFound.Name + "-new"
+	newFileName := fmt.Sprintf("%s_%v", releaseFound.Name, time.Now().UnixNano())
 
 	writer, err := os.Create(runDir+string(filepath.Separator)+newFileName)
 	if err != nil {
