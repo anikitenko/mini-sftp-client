@@ -284,6 +284,14 @@ func (c ApiV1) Download(id string) revel.Result {
 			return c.RenderJSON(response)
 		}
 	case string(testDirBytes) == "0":
+		if backup {
+			newName := fmt.Sprintf("%s_%v", saveTo+string(filepath.Separator)+fileName, time.Now().UnixNano())
+			if err := os.Rename(saveTo+string(filepath.Separator)+fileName, newName); err != nil {
+				logger.Warnf("Unable to rename old directory: %v", err)
+				response := CompileJSONResult(false, "Unable to rename old directory")
+				return c.RenderJSON(response)
+			}
+		}
 		if errString, err := DownloadDirectory(filePath, saveTo, fileName, sshSessionDownload); err != nil {
 			logger.Warnf("%s: %v", errString, err)
 			response := CompileJSONResult(false, errString)
