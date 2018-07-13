@@ -23,6 +23,7 @@ var (
 	PinCode              string
 	TimeToWaitInvalidPin time.Duration
 	ApiConnections       = make(map[string]ApiConnectionStruct)
+	StoredConnection	 = make(map[string][]map[string][]StoredUserPasswordStruct)
 )
 
 func installHandlers() {

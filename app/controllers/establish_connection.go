@@ -19,11 +19,29 @@ func (c App) EstablishSSHConnection() revel.Result {
 	sshPassword := c.Params.Get("ssh_password")
 	sshPort := strings.TrimSpace(c.Params.Get("ssh_port"))
 
+	newConnection := make(map[string][]StoredUserPasswordStruct)
+
 	if errString, err := ConnectSSH(sshIPHostname, sshUser, sshPassword, sshPort); err != nil {
 		logger.Warnf("%s: %v", errString, err)
 		response := CompileJSONResult(false, errString)
 		return c.RenderJSON(response)
 	}
+
+	if _, ok := StoredConnection[sshIPHostname]; ok {
+		for _, val := range StoredConnection[sshIPHostname] {
+			for i, val := range val {
+				if i == sshPort {
+					for _, val := range val {
+						if val.User == sshUser {
+							return nil
+						}
+					}
+				}
+			}
+		}
+	}
+	newConnection[sshPort] = append(newConnection[sshPort], StoredUserPasswordStruct{User: sshUser, Password: sshPassword})
+	StoredConnection[sshIPHostname] = append(StoredConnection[sshIPHostname], newConnection)
 
 	return nil
 }

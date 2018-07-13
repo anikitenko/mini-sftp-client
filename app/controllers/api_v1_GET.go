@@ -4,6 +4,10 @@ import (
 	"github.com/revel/revel"
 	logger "github.com/sirupsen/logrus"
 	"path/filepath"
+	"strconv"
+	"fmt"
+	"time"
+	"os"
 )
 
 // @Summary Get connections
@@ -185,6 +189,7 @@ func (c ApiV1) GetLocalPathCompletion(id string) revel.Result {
 // @Param   id      	path   	string     	true  	"Connection ID"
 // @Param   path      	query   string     	true  	"Path to file OR directory"
 // @Param	save_to		query	string		false	"If not empty than download to.. otherwise file/directory will be downloaded to local home directory"
+// @Param	backup		query	bool		false	"Specify if you want the local file be backed up before new one is downloaded"
 // @Success 200 {object} controllers.GeneralResponse	"Success"
 // @Failure 403 {string} string "Not authorized!"
 // @Router /download/{id} [get]
@@ -192,9 +197,20 @@ func (c ApiV1) Download(id string) revel.Result {
 	var sshSessionConnect SSHSessionStruct
 	fileToDownload := c.Params.Query.Get("path")
 	saveTo := c.Params.Query.Get("save_to")
+	needToBackup := c.Params.Query.Get("backup")
 
 	if saveTo == "" {
 		saveTo = LocalHomeDirectory()
+	}
+
+	if needToBackup == "" {
+		needToBackup = "false"
+	}
+	backup, err := strconv.ParseBool(needToBackup)
+	if err != nil {
+		logger.Warnf("We don't understand if we need to backup or not: %v", err)
+		response := CompileJSONResult(false, "We don't understand if we need to backup or not")
+		return c.RenderJSON(response)
 	}
 
 	if connection, ok := ApiConnections[id]; !ok {
@@ -254,12 +270,28 @@ func (c ApiV1) Download(id string) revel.Result {
 
 	switch {
 	case string(testFileBytes) == "0":
+		if backup {
+			newName := fmt.Sprintf("%s_%v", saveTo+string(filepath.Separator)+fileName, time.Now().UnixNano())
+			if err := os.Rename(saveTo+string(filepath.Separator)+fileName, newName); err != nil {
+				logger.Warnf("Unable to rename old file: %v", err)
+				response := CompileJSONResult(false, "Unable to rename old file")
+				return c.RenderJSON(response)
+			}
+		}
 		if errString, err := DownloadFile(saveTo, fileName, fileToDownload, sshSessionDownload); err != nil {
 			logger.Warnf("%s: %v", errString, err)
 			response := CompileJSONResult(false, errString)
 			return c.RenderJSON(response)
 		}
 	case string(testDirBytes) == "0":
+		if backup {
+			newName := fmt.Sprintf("%s_%v", saveTo+string(filepath.Separator)+fileName, time.Now().UnixNano())
+			if err := os.Rename(saveTo+string(filepath.Separator)+fileName, newName); err != nil {
+				logger.Warnf("Unable to rename old directory: %v", err)
+				response := CompileJSONResult(false, "Unable to rename old directory")
+				return c.RenderJSON(response)
+			}
+		}
 		if errString, err := DownloadDirectory(filePath, saveTo, fileName, sshSessionDownload); err != nil {
 			logger.Warnf("%s: %v", errString, err)
 			response := CompileJSONResult(false, errString)
