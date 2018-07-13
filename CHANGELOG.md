@@ -8,6 +8,9 @@ Features:
 Improvements:
 * More complex name is used for downloading update
 
+Fixes:
+* Upgrade process now updates static files
+
 ## [v1.0.1](#v101)
 Fixes:
 * Fix auto update
