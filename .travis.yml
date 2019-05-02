@@ -23,6 +23,7 @@ install:
   - go get -v github.com/revel/cmd/revel
   - go get -v github.com/kardianos/govendor
   - go get -v github.com/swaggo/swag/cmd/swag
+  - go get -u github.com/revel/cmd
   - npm ci
   - govendor sync
   - |
