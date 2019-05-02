@@ -33,6 +33,7 @@ install:
 
 before_script:
   - revel run github.com/anikitenko/mini-sftp-client &
+  - sleep 15
 
 script:
   - "$(npm bin)/cypress run --record"
