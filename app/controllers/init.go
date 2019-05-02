@@ -73,7 +73,7 @@ func checkPinCode(c *revel.Controller) revel.Result {
 	}
 
 	userPinCode := c.Session["pin_code"]
-	if PinCode != userPinCode {
+	if PinCode != userPinCode.(string) {
 		return c.Forbidden("You are not permitted to make this request")
 	}
 

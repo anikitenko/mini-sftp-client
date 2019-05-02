@@ -15,7 +15,7 @@ func (c App) Index() revel.Result {
 	userPinCode := c.Session["pin_code"]
 	c.ViewArgs["noPinCode"] = false
 
-	if PinCode != userPinCode && (c.ClientIP != "127.0.0.1" || testParam == "true") {
+	if PinCode != userPinCode.(string) && (c.ClientIP != "127.0.0.1" || testParam == "true") {
 		c.ViewArgs["noPinCode"] = true
 	} else {
 		c.ViewArgs["pinCode"] = PinCode

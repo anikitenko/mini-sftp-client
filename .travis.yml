@@ -18,6 +18,8 @@ cache:
 before_install: if [[ `npm -v` != 5.7* ]]; then npm i -g npm@5; fi
 
 install:
+  - go get -v github.com/twinj/uuid
+  - go get -v github.com/kr/pty
   - go get -v github.com/revel/cmd/revel
   - go get -v github.com/kardianos/govendor
   - go get -v github.com/swaggo/swag/cmd/swag
