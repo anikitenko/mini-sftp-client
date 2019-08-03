@@ -12,10 +12,17 @@ import (
 	_ "github.com/anikitenko/mini-sftp-client/app/controllers/docs"
 )
 
+type downloadsStackStruct struct {
+	Goroutine  map[string]chan struct{}
+	Err        error
+	ErrMessage string
+}
+
 // Defines global variables
 var (
 	SSHclient            *ssh.Client
 	SSHsession           *ssh.Session
+	DownloadsStack       = make(map[string]downloadsStackStruct)
 	MockSSHServer        = false
 	MockSSHHostString    = "sftp-mock-test"
 	MockSSHUser          = "test"
@@ -23,18 +30,18 @@ var (
 	PinCode              string
 	TimeToWaitInvalidPin time.Duration
 	ApiConnections       = make(map[string]ApiConnectionStruct)
-	StoredConnection	 = make(map[string][]map[string][]StoredUserPasswordStruct)
+	StoredConnection     = make(map[string][]map[string][]StoredUserPasswordStruct)
 )
 
 func installHandlers() {
 	revel.AddInitEventHandler(func(event int, _ interface{}) (r int) {
-		if event==revel.ENGINE_STARTED {
+		if event == revel.ENGINE_STARTED {
 			var (
 				serveMux     = http.NewServeMux()
 				revelHandler = revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler
 			)
 
-			serveMux.Handle("/",     revelHandler)
+			serveMux.Handle("/", revelHandler)
 			serveMux.Handle("/api/v1/index.html", httpSwagger.WrapHandler)
 			serveMux.Handle("/api/v1/doc.json", httpSwagger.WrapHandler)
 			revel.CurrentEngine.(*revel.GoHttpServer).Server.Handler = serveMux
