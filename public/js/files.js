@@ -10,9 +10,18 @@ $(function () {
                 sshPort = $("#sshPort").val(),
                 notify = $.notify("Downloading...", {
                     type: 'success',
-                    allow_dismiss: false,
                     showProgressbar: true,
-                    delay: 0
+                    delay: 0,
+                    allow_dismiss: false,
+                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                    '<span data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar" style="margin-bottom: 10px;">' +
+                    '<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"></div>' +
+                    '</div>' +
+                    '<div class="text-right"><button data-path="'+
+                    draggablePath+'/'+draggableName+
+                    '" type="button" class="cancelDownload btn btn-danger ladda-button" data-style="zoom-out">Cancel</button></div>' +
+                    '</div>'
                 }),
                 sourcePath = $("#remotePath").val(),
                 localPath = $('#localPath').val(),
@@ -67,6 +76,20 @@ $(function () {
         }
     });
 
+    $(document).on("click", ".cancelDownload", function () {
+        let _this = this,
+            filePath = $(_this).attr("data-path"),
+            l = Ladda.create(_this);
+        l.start();
+        bootbox.confirm("Are you sure you want to stop download?", function(result){
+            if (!result) {
+                l.stop();
+                return;
+            }
+            alert("ok!");
+        });
+    });
+
     function download(sshIP, sshUser, sshPassword, sshPort, sourcePath, draggablePath, localPath, isDir, fileToBackup, localFileExists, ui, notify) {
         $.post("/download", {
             ssh_ip: sshIP,
@@ -95,7 +118,7 @@ $(function () {
             }
         }, 'json').always(function () {
             notify.update('progress', '100');
-            notify.close();
+            //notify.close();
         });
     }
 });
