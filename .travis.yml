@@ -4,7 +4,7 @@ node_js:
   - 8
 
 go:
-  - 1.9
+  - 1.12
 
 os:
   - osx
@@ -18,14 +18,14 @@ cache:
 before_install: if [[ `npm -v` != 5.7* ]]; then npm i -g npm@5; fi
 
 install:
-  - go get -v github.com/twinj/uuid
-  - go get -v github.com/kr/pty
-  - go get -v github.com/revel/cmd/revel
-  - go get -v github.com/kardianos/govendor
-  - go get -v github.com/swaggo/swag/cmd/swag
-  - go get -u github.com/revel/cmd
+  - go get -v -u github.com/twinj/uuid
+  - go get -v -u github.com/kr/pty
+  - go get -v -u github.com/revel/cmd/revel
+  - go get -v -u github.com/golang/dep/cmd/dep
+  - go get -v -u github.com/swaggo/swag/cmd/swag
+  - go get -v -u github.com/revel/cmd
   - npm ci
-  - govendor sync
+  - dep ensure
   - |
       if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         sed -i '' "s/\/\/ @version 1.0.0/\/\/ @version $TRAVIS_TAG/" app/controllers/api_v1.go
@@ -35,6 +35,7 @@ install:
   - swag init -g api_v1.go -d app/controllers
 
 before_script:
+  - revel version
   - revel run github.com/anikitenko/mini-sftp-client &
   - sleep 15
 

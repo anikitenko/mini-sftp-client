@@ -13,7 +13,7 @@ CGO_ENABLED=0 GOOS=linux revel build github.com/anikitenko/mini-sftp-client ../m
 CGO_ENABLED=0 GOOS=windows revel build github.com/anikitenko/mini-sftp-client ../mini-sftp-windows
 
 cd run
-govendor sync
+dep ensure
 
 CGO_ENABLED=0 go build -o ../../run-osx && chmod +x ../../run-osx
 CGO_ENABLED=0 GOOS=linux go build -o ../../run-linux && chmod +x ../../run-linux
