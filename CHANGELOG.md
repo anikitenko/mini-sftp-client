@@ -1,3 +1,17 @@
+## [v1.1.0](#v110)
+Features:
+* Backup support for files
+* Backup is working for directories too only via API
+* Saving credentials in memory
+* Optionally save credentials in cookies (notice about serious security issue appears as well)
+
+Improvements:
+* More complex name is used for downloading updates
+* Ability to stop download process
+
+Fixes:
+* Upgrade process now updates static files
+
 ## [v1.0.1](#v101)
 Fixes:
 * Fix auto update
