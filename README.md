@@ -33,7 +33,8 @@ and pickup the latest version for your OS
 - [x] Docker support ([see below](#want-to-run-as-a-docker-image))
 
 ## Security
-Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
+* Trying to access client from public network (not from localhost) is only possible with pin code. Pin code is shown in the top right corner of the page and in client logs. Pin code is generated each time you start the client and is stored in memory.
+* Saved connections are stored only in memory. Sure, you have abiliy to store in cookies but security prompt will explain you why it's a bad idea
 
 ### Want to run as a docker image?
 #### Run from Docker hub:
